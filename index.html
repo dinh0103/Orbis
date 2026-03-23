@@ -1307,16 +1307,17 @@ function openPanel(u){
   if(u.spotifyId){
     // Spotify embed player
     var embedWrap=document.createElement('div');
-    embedWrap.style.cssText='border-radius:12px;overflow:hidden;margin-top:2px';
+    embedWrap.style.cssText='border-radius:12px;overflow:hidden;margin-top:2px;flex:1;min-height:0;display:flex;flex-direction:column';
     var iframe=document.createElement('iframe');
     iframe.src='https://open.spotify.com/embed/playlist/'+u.spotifyId+'?utm_source=generator&theme=0';
-    iframe.width='100%';iframe.height='352';
+    iframe.width='100%';iframe.height='100%';
     iframe.setAttribute('frameBorder','0');
     iframe.setAttribute('allowfullscreen','');
     iframe.setAttribute('allow','autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture');
     iframe.setAttribute('loading','lazy');
-    iframe.style.cssText='border-radius:12px;display:block';
+    iframe.style.cssText='border-radius:12px;display:block;flex:1;min-height:0';
     embedWrap.appendChild(iframe);
+    ps.style.flex='1';ps.style.minHeight='0';ps.style.display='flex';ps.style.flexDirection='column';
     ps.appendChild(embedWrap);
   } else {
     for(var i=0;i<u.playlist.length;i++){var s=u.playlist[i];var row=document.createElement('div');row.className='srow';row.innerHTML='<span class="snum">'+(i+1)+'</span><div class="si"><div class="st">'+s.t+'</div><div class="sa">'+s.a+'</div></div><span class="sd">'+s.d+'</span>';ps.appendChild(row);}
