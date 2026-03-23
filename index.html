@@ -775,10 +775,10 @@ function getDriftOffset(id){
     DRIFT_OFFSETS[id]={
       px:r1*Math.PI*2,           // x phase
       py:r2*Math.PI*2,           // y phase
-      freqx:0.08+r3*0.10,        // x oscillation speed (slow, dreamy)
-      freqy:0.06+r4*0.08,        // y slightly different so orbit is elliptical
-      rx:6+r1*10,                // x pixel radius (6–16px)
-      ry:4+r2*8,                 // y pixel radius (4–12px) — flatter ellipse
+      freqx:0.12+r3*0.14,        // x oscillation speed
+      freqy:0.09+r4*0.11,        // y slightly different so orbit is elliptical
+      rx:12+r1*18,               // x pixel radius (12–30px)
+      ry:8+r2*14,                // y pixel radius (8–22px)
     };
   }
   return DRIFT_OFFSETS[id];
