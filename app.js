@@ -28,6 +28,7 @@ var PL_BRIGHT=100,PL_SAT=100,PL_GLOW=50;
 // Background filter state
 var BG_HUE=0,BG_BRIGHT=100,BG_NEBULA=60;
 var myHat="crown";
+var myRing=false;
 
 var HATS=[
   {id:"none",   label:"None"},
@@ -39,112 +40,100 @@ var HATS=[
 ];
 
 var USERS=[
-  {id:0,me:true,name:"you",songs:41,genre:"Indie",connections:[1,3,6],likes:[],initials:"ME",
-   pos:{x:0.48,y:0.46},
+  {id:0,me:true,name:"you",songs:41,genre:"Indie",connections:[1,7,9],likes:[],customTags:["bedroom", "melancholy", "folk"],initials:"ME",
+   pos:{x:0.50,y:0.48},
    baseColor:null,gradient:null,
    playlist:[{t:"Motion Sickness",a:"Phoebe Bridgers",d:"3:25"},{t:"Savior Complex",a:"Phoebe Bridgers",d:"4:02"},{t:"Cigarette Daydreams",a:"Cage The Elephant",d:"3:32"},{t:"Atlas Hands",a:"Benjamin Francis Leftwich",d:"4:10"},{t:"Holocene",a:"Bon Iver",d:"5:37"}]},
-    // nova.wav — cool indigo, aurora gradient (blue→purple sweep)
-  {id:1,name:"nova.wav",songs:34,genre:"Indie",connections:[0,3],likes:[],initials:"NW",
-   baseColor:"#6366f1",baseColor2:"#06b6d4",gradAngle:120,gradient:"aurora",
+    {id:1,name:"nova.wav",songs:34,genre:"Indie",connections:[0,3],likes:[],initials:"NW",
+   baseColor:"#6366f1",customTags:["bedroom","indie folk"],baseColor2:"#06b6d4",gradAngle:120,gradient:"aurora",
    playlist:[{t:"Garden Song",a:"Phoebe Bridgers",d:"3:07"},{t:"Moon Song",a:"Phoebe Bridgers",d:"3:37"},{t:"Funeral",a:"Phoebe Bridgers",d:"4:10"},{t:"Kyoto",a:"Phoebe Bridgers",d:"2:54"},{t:"Savior Complex",a:"Phoebe Bridgers",d:"4:02"}]},
-  // solarflare — deep amber with lava gradient (fiery orange→red)
-  {id:2,name:"solarflare",songs:58,genre:"Electronic",connections:[4],likes:[],initials:"SF",
+  {id:2,name:"solarflare",songs:58,genre:"Electronic",connections:[4],likes:[],customTags:["synth", "late night", "electronic"],initials:"SF",
    baseColor:"#f59e0b",baseColor2:"#ef4444",gradAngle:160,gradient:"lava",
    playlist:[{t:"Midnight City",a:"M83",d:"4:03"},{t:"Taro",a:"alt-J",d:"5:02"},{t:"Breezeblocks",a:"alt-J",d:"3:47"},{t:"Intro",a:"The xx",d:"2:07"},{t:"Crystalised",a:"The xx",d:"3:33"},{t:"Something Good",a:"alt-J",d:"4:23"}]},
-  // velvetfrq — rich magenta, no gradient, pure saturated pink
-  {id:3,name:"velvetfrq",songs:47,genre:"R&B",connections:[0,5],likes:[],initials:"VF",
+  {id:3,name:"velvetfrq",songs:47,genre:"R&B",connections:[0,5],likes:[],customTags:["smooth", "slow burn", "silk"],initials:"VF",
    baseColor:"#e879f9",gradient:null,
    playlist:[{t:"Good Days",a:"SZA",d:"4:39"},{t:"Supermodel",a:"SZA",d:"3:49"},{t:"Essence",a:"Wizkid ft. Tems",d:"3:45"},{t:"Love Galore",a:"SZA",d:"4:25"},{t:"Normal Girl",a:"SZA",d:"3:18"}]},
-  // bassweight — dark orange with void gradient (deep black-purple shadow)
-  {id:4,name:"bassweight",songs:71,genre:"Electronic",connections:[2,5],likes:[],initials:"BW",
+  {id:4,name:"bassweight",songs:71,genre:"Electronic",connections:[2,5],likes:[],customTags:["bass heavy", "dark", "club"],initials:"BW",
    baseColor:"#f97316",baseColor2:"#1e1b4b",gradAngle:200,gradient:"void",
    playlist:[{t:"Strobe",a:"deadmau5",d:"10:37"},{t:"Scary Monsters",a:"Skrillex",d:"5:24"},{t:"Animals",a:"Martin Garrix",d:"5:37"},{t:"Levels",a:"Avicii",d:"5:38"},{t:"Lean On",a:"Major Lazer",d:"2:55"},{t:"Turn Down For What",a:"DJ Snake",d:"3:34"},{t:"Wake Me Up",a:"Avicii",d:"4:06"}]},
-  // cottonpink — soft coral, ice gradient (pale blue shimmer overlay)
-  {id:5,name:"cottonpink",songs:18,genre:"Pop",connections:[3,4],likes:[],initials:"CP",
+  {id:5,name:"cottonpink",songs:18,genre:"Pop",connections:[3,4],likes:[],customTags:["pop anthems", "feel good", "glossy"],initials:"CP",
    baseColor:"#fb7185",baseColor2:"#bae6fd",gradAngle:45,gradient:"ice",
    playlist:[{t:"Anti-Hero",a:"Taylor Swift",d:"3:20"},{t:"Cruel Summer",a:"Taylor Swift",d:"2:58"},{t:"Flowers",a:"Miley Cyrus",d:"3:20"}]},
-  // deepspace77 — electric blue, nebula gradient (purple-blue cosmic)
-  {id:6,name:"deepspace77",songs:62,genre:"Ambient",connections:[0,2],likes:[],initials:"DS",
+  {id:6,name:"deepspace77",songs:62,genre:"Ambient",connections:[0,2],likes:[],customTags:["space", "meditation", "float"],initials:"DS",
    baseColor:"#38bdf8",baseColor2:"#7c3aed",gradAngle:135,gradient:"nebula",
    playlist:[{t:"An Ending",a:"Brian Eno",d:"4:04"},{t:"Weightless",a:"Marconi Union",d:"8:09"},{t:"Xtal",a:"Aphex Twin",d:"4:54"},{t:"Avril 14th",a:"Aphex Twin",d:"2:05"},{t:"Selected Ambient Works",a:"Aphex Twin",d:"5:14"},{t:"Here Comes the Sun",a:"George Harrison",d:"3:05"}]},
-  // driftcloud9 — seafoam mint, no gradient, clean and calm
   {id:7,name:"driftcloud9",songs:22,genre:"Lo-fi",connections:[1],likes:[],initials:"DC",
-   baseColor:"#2dd4bf",gradient:null,spotifyId:null,
+   customTags:["rainy day","study"],baseColor:"#2dd4bf",gradient:null,spotifyId:null,
    playlist:[{t:"Snow",a:"Øneheart",d:"2:48"},{t:"alone",a:"Grentperez",d:"2:55"},{t:"Dreams",a:"Fleetwood Mac",d:"4:14"}]},
-  // spotifydemo — vivid Spotify green, aurora gradient (green→cyan)
-  {id:8,name:"spotifydemo",songs:50,genre:"Pop",connections:[],likes:[],initials:"SP",
+  {id:8,name:"spotifydemo",songs:50,genre:"Pop",connections:[],likes:[],customTags:["charts", "trending", "pop"],initials:"SP",
    baseColor:"#22c55e",baseColor2:"#06b6d4",gradAngle:90,gradient:"aurora",spotifyId:"37i9dQZF1DXcBWIGoYBM5M",
    playlist:[{t:"Open Spotify player",a:"Click to play",d:""}]},
-  // lunarsync — cool silver-blue, no gradient, icy minimal
-  {id:9,name:"lunarsync",songs:29,genre:"Ambient",connections:[6],likes:[],initials:"LS",
+  {id:9,name:"lunarsync",songs:29,genre:"Ambient",connections:[6],likes:[],customTags:["ambient", "midnight", "drift"],initials:"LS",
    baseColor:"#94a3b8",gradient:null,
    playlist:[{t:"Intro",a:"The xx",d:"2:07"},{t:"Crystalised",a:"The xx",d:"3:33"},{t:"On+On",a:"Erykah Badu",d:"4:12"}]},
-  // sungrazer — golden yellow, lava gradient (warm sun burst)
-  {id:10,name:"sungrazer",songs:44,genre:"Indie",connections:[1,7],likes:[],initials:"SG",
+  {id:10,name:"sungrazer",songs:44,genre:"Indie",connections:[1,7],likes:[],customTags:["folk", "sunshine", "road trip"],initials:"SG",
    baseColor:"#facc15",baseColor2:"#f97316",gradAngle:170,gradient:"lava",
    playlist:[{t:"Do I Wanna Know?",a:"Arctic Monkeys",d:"4:32"},{t:"505",a:"Arctic Monkeys",d:"4:13"},{t:"R U Mine?",a:"Arctic Monkeys",d:"3:21"},{t:"Why'd You Only Call Me When You're High?",a:"Arctic Monkeys",d:"2:42"}]},
-  // violetdepth — deep violet, void gradient (ultra dark purple)
-  {id:11,name:"violetdepth",songs:67,genre:"Electronic",connections:[2],likes:[],initials:"VD",
+  {id:11,name:"violetdepth",songs:67,genre:"Electronic",connections:[2],likes:[],customTags:["dark wave", "industrial", "intense"],initials:"VD",
    baseColor:"#7c3aed",baseColor2:"#0f172a",gradAngle:225,gradient:"void",
    playlist:[{t:"Strobe",a:"deadmau5",d:"10:37"},{t:"Teardrop",a:"Massive Attack",d:"5:29"},{t:"Teardrop",a:"Massive Attack",d:"5:29"},{t:"Angel",a:"Massive Attack",d:"6:17"}]},
-  // blushwave — warm rose, no gradient, soft and plain
-  {id:12,name:"blushwave",songs:15,genre:"Lo-fi",connections:[5,7],likes:[],initials:"BW",
+  {id:12,name:"blushwave",songs:15,genre:"Lo-fi",connections:[5,7],likes:[],customTags:["soft", "gentle", "sleep"],initials:"BW",
    baseColor:"#fda4af",gradient:null,
    playlist:[{t:"Comptine d'un autre été",a:"Yann Tiersen",d:"2:38"},{t:"River Flows in You",a:"Yiruma",d:"3:52"}]},
 
   // ── Extended system ──
-  {id:13,name:"prismhaus",songs:39,genre:"Electronic",connections:[2,4],likes:[],initials:"PH",
+  {id:13,name:"prismhaus",songs:39,genre:"Electronic",connections:[2,4],likes:[],customTags:["techno", "rave", "pulse"],initials:"PH",
    baseColor:"#c084fc",baseColor2:"#06b6d4",gradAngle:80,gradient:"nebula",
    playlist:[{t:"Breathe",a:"Télépopmusik",d:"4:36"},{t:"Chillout",a:"Moderat",d:"5:12"},{t:"Bad Kingdom",a:"Moderat",d:"5:02"}]},
-  {id:14,name:"dustorbit",songs:53,genre:"Indie",connections:[1,10],likes:[],initials:"DO",
+  {id:14,name:"dustorbit",songs:53,genre:"Indie",connections:[1,10],likes:[],customTags:["indie rock", "guitar", "grunge"],initials:"DO",
    baseColor:"#a8a29e",baseColor2:"#44403c",gradAngle:210,gradient:null,
    playlist:[{t:"Motion Picture Soundtrack",a:"Radiohead",d:"5:18"},{t:"Pyramid Song",a:"Radiohead",d:"4:48"},{t:"Exit Music",a:"Radiohead",d:"4:24"},{t:"How to Disappear",a:"Radiohead",d:"5:57"}]},
-  {id:15,name:"reedlight",songs:27,genre:"R&B",connections:[3],likes:[],initials:"RL",
+  {id:15,name:"reedlight",songs:27,genre:"R&B",connections:[3],likes:[],customTags:["r&b vibes", "romantic", "velvet"],initials:"RL",
    baseColor:"#f43f5e",baseColor2:"#fbbf24",gradAngle:150,gradient:"lava",
    playlist:[{t:"Pink + White",a:"Frank Ocean",d:"3:02"},{t:"Nights",a:"Frank Ocean",d:"5:07"},{t:"Self Control",a:"Frank Ocean",d:"4:10"}]},
-  {id:16,name:"cloudpatch",songs:18,genre:"Ambient",connections:[6,9],likes:[],initials:"CP",
+  {id:16,name:"cloudpatch",songs:18,genre:"Ambient",connections:[6,9],likes:[],customTags:["calm", "sleep"],initials:"CP",
    baseColor:"#e0f2fe",baseColor2:"#7dd3fc",gradAngle:30,gradient:"ice",
    playlist:[{t:"Gymnopédie No.1",a:"Erik Satie",d:"3:05"},{t:"Experience",a:"Ludovico Einaudi",d:"4:58"}]},
-  {id:17,name:"ghostfreq",songs:61,genre:"Electronic",connections:[11,2],likes:[],initials:"GF",
+  {id:17,name:"ghostfreq",songs:61,genre:"Electronic",connections:[11,2],likes:[],customTags:["cinematic", "sci-fi", "dark"],initials:"GF",
    baseColor:"#1e293b",baseColor2:"#8b5cf6",gradAngle:270,gradient:"void",
    playlist:[{t:"Blade Runner Blues",a:"Vangelis",d:"7:02"},{t:"Oxygène Pt.4",a:"Jean-Michel Jarre",d:"4:14"},{t:"Equinoxe Pt.5",a:"Jean-Michel Jarre",d:"3:59"}]},
-  {id:18,name:"terrafolk",songs:33,genre:"Indie",connections:[10,14],likes:[],initials:"TF",
+  {id:18,name:"terrafolk",songs:33,genre:"Indie",connections:[10,14],likes:[],customTags:["acoustic", "folk", "campfire"],initials:"TF",
    baseColor:"#86efac",baseColor2:"#4ade80",gradAngle:100,gradient:null,
    playlist:[{t:"The House That Heaven Built",a:"Japandroids",d:"4:57"},{t:"Sprawl II",a:"Arcade Fire",d:"5:28"},{t:"Rebellion (Lies)",a:"Arcade Fire",d:"5:10"}]},
   {id:19,name:"magnetar",songs:78,genre:"Electronic",connections:[4,17],likes:[],initials:"MG",
-   baseColor:"#fcd34d",baseColor2:"#f97316",gradAngle:190,gradient:"lava",
+   baseColor:"#fcd34d",customTags:["hype","dance","club"],baseColor2:"#f97316",gradAngle:190,gradient:"lava",
    playlist:[{t:"Technologic",a:"Daft Punk",d:"4:44"},{t:"Get Lucky",a:"Daft Punk",d:"6:09"},{t:"One More Time",a:"Daft Punk",d:"5:20"},{t:"Around the World",a:"Daft Punk",d:"7:07"},{t:"Harder Better Faster",a:"Daft Punk",d:"3:44"}]},
-  {id:20,name:"ashveil",songs:24,genre:"Lo-fi",connections:[7,12],likes:[],initials:"AV",
+  {id:20,name:"ashveil",songs:24,genre:"Lo-fi",connections:[7,12],likes:[],customTags:["chill", "nostalgic", "lo-fi"],initials:"AV",
    baseColor:"#78716c",baseColor2:"#292524",gradAngle:310,gradient:null,
    playlist:[{t:"Yugen",a:"Nujabes",d:"4:28"},{t:"Feather",a:"Nujabes",d:"3:57"},{t:"Reflection Eternal",a:"Nujabes",d:"4:11"}]},
-  {id:21,name:"neonrift",songs:46,genre:"R&B",connections:[3,15],likes:[],initials:"NR",
+  {id:21,name:"neonrift",songs:46,genre:"R&B",connections:[3,15],likes:[],customTags:["late night", "r&b mood"],initials:"NR",
    baseColor:"#fb7185",baseColor2:"#c026d3",gradAngle:55,gradient:"nebula",
    playlist:[{t:"Do For Love",a:"2Pac",d:"4:33"},{t:"Redbone",a:"Childish Gambino",d:"5:27"},{t:"Stand Tall",a:"Childish Gambino",d:"2:39"}]},
-  {id:22,name:"icecore",songs:41,genre:"Ambient",connections:[16,9],likes:[],initials:"IC",
+  {id:22,name:"icecore",songs:41,genre:"Ambient",connections:[16,9],likes:[],customTags:["ice cold", "ambient", "deep"],initials:"IC",
    baseColor:"#bae6fd",baseColor2:"#e0f2fe",gradAngle:0,gradient:"ice",
    playlist:[{t:"Music for Airports 1/1",a:"Brian Eno",d:"17:19"},{t:"Thursday Afternoon",a:"Brian Eno",d:"60:59"}]},
-  {id:23,name:"ferrowave",songs:55,genre:"Pop",connections:[5,8],likes:[],initials:"FW",
+  {id:23,name:"ferrowave",songs:55,genre:"Pop",connections:[5,8],likes:[],customTags:["pop hits", "dancing", "bright"],initials:"FW",
    baseColor:"#f9a8d4",baseColor2:"#a855f7",gradAngle:130,gradient:"aurora",
    playlist:[{t:"Espresso",a:"Sabrina Carpenter",d:"2:55"},{t:"Please Please Please",a:"Sabrina Carpenter",d:"3:06"},{t:"Feather",a:"Sabrina Carpenter",d:"2:46"}]},
-  {id:24,name:"vantacore",songs:70,genre:"Electronic",connections:[17,11],likes:[],initials:"VC",
+  {id:24,name:"vantacore",songs:70,genre:"Electronic",connections:[17,11],likes:[],customTags:["dark", "experimental", "bass"],initials:"VC",
    baseColor:"#0f172a",baseColor2:"#312e81",gradAngle:240,gradient:"void",
    playlist:[{t:"Portal",a:"Burial",d:"5:43"},{t:"Archangel",a:"Burial",d:"5:47"},{t:"Shell of Light",a:"Burial",d:"5:03"},{t:"Near Dark",a:"Burial",d:"6:42"}]},
-  {id:25,name:"solstice",songs:31,genre:"Indie",connections:[1,18],likes:[],initials:"SL",
+  {id:25,name:"solstice",songs:31,genre:"Indie",connections:[1,18],likes:[],customTags:["dreamy", "acoustic", "heartbreak"],initials:"SL",
    baseColor:"#fde68a",baseColor2:"#fb923c",gradAngle:175,gradient:"lava",
    playlist:[{t:"Eye of the Needle",a:"Sufjan Stevens",d:"3:17"},{t:"Death With Dignity",a:"Sufjan Stevens",d:"3:52"},{t:"Should Have Known Better",a:"Sufjan Stevens",d:"4:55"}]},
-  {id:26,name:"mirella",songs:22,genre:"Pop",connections:[5,23],likes:[],initials:"MI",
+  {id:26,name:"mirella",songs:22,genre:"Pop",connections:[5,23],likes:[],customTags:["pop", "girly", "dance"],initials:"MI",
    baseColor:"#f0abfc",gradient:null,
    playlist:[{t:"Levitating",a:"Dua Lipa",d:"3:23"},{t:"Physical",a:"Dua Lipa",d:"3:13"},{t:"Don't Start Now",a:"Dua Lipa",d:"3:27"}]},
-  {id:27,name:"subpolar",songs:48,genre:"Ambient",connections:[22,16],likes:[],initials:"SP",
+  {id:27,name:"subpolar",songs:48,genre:"Ambient",connections:[22,16],likes:[],customTags:["deep space", "meditative", "slow"],initials:"SP",
    baseColor:"#0ea5e9",baseColor2:"#6366f1",gradAngle:145,gradient:"nebula",
    playlist:[{t:"Stars of the Lid",a:"Stars of the Lid",d:"8:44"},{t:"And Their Refinement",a:"Stars of the Lid",d:"9:12"}]},
-  {id:28,name:"groveyard",songs:36,genre:"R&B",connections:[21,3],likes:[],initials:"GY",
+  {id:28,name:"groveyard",songs:36,genre:"R&B",connections:[21,3],likes:[],customTags:["soul", "smooth", "neo-soul"],initials:"GY",
    baseColor:"#854d0e",baseColor2:"#b45309",gradAngle:185,gradient:null,
    playlist:[{t:"The Sweetest Taboo",a:"Sade",d:"4:43"},{t:"Smooth Operator",a:"Sade",d:"4:58"},{t:"No Ordinary Love",a:"Sade",d:"6:01"}]},
-  {id:29,name:"pulsewave",songs:63,genre:"Electronic",connections:[13,19],likes:[],initials:"PW",
+  {id:29,name:"pulsewave",songs:63,genre:"Electronic",connections:[13,19],likes:[],customTags:["techno", "driving", "rave"],initials:"PW",
    baseColor:"#22d3ee",baseColor2:"#6366f1",gradAngle:95,gradient:"aurora",
    playlist:[{t:"Windowlicker",a:"Aphex Twin",d:"10:03"},{t:"Come to Daddy",a:"Aphex Twin",d:"5:08"},{t:"Alberto Balsalm",a:"Aphex Twin",d:"4:54"}]},
-  {id:30,name:"fogline",songs:19,genre:"Lo-fi",connections:[20,7],likes:[],initials:"FL",
+  {id:30,name:"fogline",songs:19,genre:"Lo-fi",connections:[20,7],likes:[],customTags:["foggy", "calm", "late night"],initials:"FL",
    baseColor:"#d6d3d1",gradient:null,
    playlist:[{t:"La Vie en Rose",a:"Édith Piaf",d:"3:06"},{t:"Clair de lune",a:"Debussy",d:"5:04"}]},
 ];
@@ -189,7 +178,7 @@ var KEYWORD_MAP={"chill":["Lo-fi","Ambient"],"relax":["Lo-fi","Ambient"],"sleep"
 var KEYWORD_SUGGESTIONS=["chill","dance","sad","study","hype","dreamy","vibe","party","acoustic","space"];
 var PALETTE=[["#f87171","#dc2626","#450a0a"],["#4ade80","#16a34a","#052e16"],["#38bdf8","#0284c7","#0c4a6e"],["#e879f9","#a21caf","#4a044e"],["#fb923c","#ea580c","#431407"],["#a3e635","#65a30d","#1a2e05"]];
 
-var MIN_R=20,MAX_R=50,MIN_S=18,MAX_S=71;
+var MIN_R=26,MAX_R=60,MIN_S=18,MAX_S=71;
 function radius(s){return MIN_R+((Math.min(s,MAX_S)-MIN_S)/(MAX_S-MIN_S))*(MAX_R-MIN_R);}
 
 function pseudoRand(seed){
@@ -202,7 +191,7 @@ function assignPositions(){
   var gc={};
   for(var i=0;i<USERS.length;i++){
     var u=USERS[i];if(u.pos)continue;
-    var g=u.genre;if(!gc[g])gc[g]=0;var idx=gc[g]++;
+    var g=(u.genres&&u.genres[0])||u.genre;if(!gc[g])gc[g]=0;var idx=gc[g]++;
     var cc=CLUSTER_CENTERS[g]||{x:.5,y:.5};
 
     var seed=u.id*31+idx*17+(g.charCodeAt(0)*7);
@@ -211,12 +200,10 @@ function assignPositions(){
     var r3=pseudoRand(seed+7);
     var r4=pseudoRand(seed+11);
 
-    // Fully random angle — no slicing, just pure random 0..2π
-    var angle=r1*Math.PI*2;
+      var angle=r1*Math.PI*2;
 
     // Random spread using square-root distribution so planets fill area evenly
-    // (not clumped at center) — sqrt gives uniform area coverage
-    var minR=0.08, maxR=0.30;
+      var minR=0.08, maxR=0.30;
     var spread=minR + Math.sqrt(r2)*(maxR-minR);
 
     // Every 3rd planet gets extra scatter to break up cluster density
@@ -236,13 +223,13 @@ function assignPositions(){
   separatePlanets();
 }
 function separatePlanets(){
-  for(var pass=0;pass<80;pass++){
+  for(var pass=0;pass<40;pass++){
     for(var i=0;i<USERS.length;i++){
       for(var j=i+1;j<USERS.length;j++){
         var a=USERS[i],b=USERS[j];
-        var ri=radius(a.songs)/(W||800)*1.35,rj=radius(b.songs)/(W||800)*1.35,minD=ri+rj+0.028;
+        var ri=radius(a.songs)/(W||800)*2.2,rj=radius(b.songs)/(W||800)*2.2,minD=ri+rj+0.028;
         var dx=b.pos.x-a.pos.x,dy=b.pos.y-a.pos.y,dist=Math.sqrt(dx*dx+dy*dy)||0.0001;
-        if(dist<minD){var push=(minD-dist)/2,nx=dx/dist,ny=dy/dist;a.pos.x=Math.max(.04,Math.min(.96,a.pos.x-nx*push));a.pos.y=Math.max(.04,Math.min(.93,a.pos.y-ny*push));b.pos.x=Math.max(.04,Math.min(.96,b.pos.x+nx*push));b.pos.y=Math.max(.04,Math.min(.93,b.pos.y+ny*push));}
+        if(dist<minD){var push=(minD-dist)/2,nx=dx/dist,ny=dy/dist;a.pos.x=a.pos.x-nx*push;a.pos.y=a.pos.y-ny*push;b.pos.x=b.pos.x+nx*push;b.pos.y=b.pos.y+ny*push;}
       }
     }
   }
@@ -255,7 +242,7 @@ var planetsLayer=document.getElementById('planets-layer');
 var W=0,H=0,stars=[];
 var offsetX=0,offsetY=0,scale=1,MIN_SCALE=.3,MAX_SCALE=2.2;
 var panDragging=false,panSX=0,panSY=0,panOX=0,panOY=0;
-var activeFilter=null,searchQ='',activeKeyword=null,visibleIds=new Set();
+var searchQ='',activeKeyword=null,visibleIds=new Set();
 var tick=0,openedUserId=-1,sidebarCollapsed=false,hatPickerOpen=false;
 // Shooting stars
 var shooters=[];
@@ -286,8 +273,8 @@ function getDriftOffset(id){
       py:r2*Math.PI*2,           // y phase
       freqx:0.12+r3*0.14,        // x oscillation speed
       freqy:0.09+r4*0.11,        // y slightly different so orbit is elliptical
-      rx:12+r1*18,               // x pixel radius (12–30px)
-      ry:8+r2*14,                // y pixel radius (8–22px)
+      rx:5+r1*7,                // x pixel radius (5–12px)
+      ry:3+r2*5,                 // y pixel radius (3–8px)
     };
   }
   return DRIFT_OFFSETS[id];
@@ -295,7 +282,7 @@ function getDriftOffset(id){
 var zoomDragging=false,zoomDragStartY=0,zoomDragStartScale=1;
 // Settings
 var settingsOpen=false;
-var OPT_STARS=true,OPT_ANIM=true,OPT_VIBES=true,OPT_HATS=false,OPT_LINES=true,OPT_LABELS=true,OPT_SHOOTING=true,PLANET_LIMIT=20;
+var OPT_STARS=true,OPT_ANIM=true,OPT_VIBES=true,OPT_HATS=false,OPT_LINES=true,OPT_LABELS=true,OPT_SHOOTING=true,PLANET_LIMIT=12;
 // Fixed background (presets removed)
 var BG_BASE={bg:"#04040f",cloud1:"#12083a",cloud2:"#071428",cloud3:"#100828"};
 // Random hats assigned to other users when OPT_HATS is on
@@ -318,13 +305,11 @@ function makeStars(){
   }
 }
 function worldToScreen(wx,wy){var cx=W/2,cy=H/2;return{x:cx+(wx-cx+offsetX)*scale,y:cy+(wy-cy+offsetY)*scale};}
-function getWorldPos(id){var u=getUserById(id);if(!u)return{x:0,y:0};var bp=u.pos||{x:.5,y:.5};return{x:bp.x*W*1.35-W*.18,y:bp.y*H*1.35-H*.18};}
+function getWorldPos(id){var u=getUserById(id);if(!u)return{x:0,y:0};var bp=u.pos||{x:.5,y:.5};return{x:bp.x*W*2.2-W*.6,y:bp.y*H*2.2-H*.6};}
 function getPos(id){
-  // Returns the STABLE screen position (no drift) — used for labels and constellation lines
   return worldToScreen(getWorldPos(id).x, getWorldPos(id).y);
 }
 function getDriftedPos(id){
-  // Returns the drifted screen position — used only for the planet SVG itself
   var base=getPos(id); // stable screen position
   if(OPT_ANIM){
     var u=getUserById(id);
@@ -345,7 +330,7 @@ function updateZoomUI(){document.getElementById('zoom-pct').textContent=Math.rou
 document.getElementById('zoom-track').addEventListener('click',function(e){var rect=this.getBoundingClientRect();setScale(MIN_SCALE+(1-(e.clientY-rect.top)/this.offsetHeight)*(MAX_SCALE-MIN_SCALE));renderAll();});
 document.getElementById('zoom-thumb').addEventListener('mousedown',function(e){e.stopPropagation();zoomDragging=true;zoomDragStartY=e.clientY;zoomDragStartScale=scale;});
 document.addEventListener('mousemove',function(e){if(zoomDragging){var dz=-(e.clientY-zoomDragStartY)/(document.getElementById('zoom-track').offsetHeight||90)*(MAX_SCALE-MIN_SCALE);setScale(zoomDragStartScale+dz);renderAll();return;}if(panDragging){offsetX=panOX+(e.clientX-panSX)/scale;offsetY=panOY+(e.clientY-panSY)/scale;renderPlanets();}});
-document.addEventListener('mouseup',function(){zoomDragging=false;panDragging=false;root.style.cursor='default';});
+document.addEventListener('mouseup',function(){zoomDragging=false;panDragging=false;root.style.cursor='';});
 document.getElementById('zoom-in').addEventListener('click',function(){setScale(scale+.15);renderAll();});
 document.getElementById('zoom-out').addEventListener('click',function(){setScale(scale-.15);renderAll();});
 root.addEventListener('wheel',function(e){e.preventDefault();setScale(scale+(e.deltaY>0?-.1:.1));renderAll();},{passive:false});
@@ -449,6 +434,27 @@ function getHatSVG(hatId,cx,cy,r,c0){
 
 function buildHatPicker(){
   var opts=document.getElementById('hat-options');opts.innerHTML='';
+  var ringTog=document.getElementById('tog-ring');
+  if(ringTog)ringTog.className=myRing?'toggle on':'toggle';
+  var ringTogPanel=document.getElementById('tog-ring-panel');
+  if(ringTogPanel)ringTogPanel.className=myRing?'toggle on':'toggle';
+  // Also populate inline hat options inside customize panel
+  var inlineOpts=document.getElementById('inline-hat-options');
+  if(inlineOpts){
+    inlineOpts.innerHTML='';
+    var pr2=11,pd2=pr2*2+8,pcy2=pd2/2+Math.round(pr2*0.65),ptH2=pd2+Math.round(pr2*0.65);
+    for(var ii=0;ii<HATS.length;ii++){
+      var hh=HATS[ii],iel=document.createElement('div');
+      iel.style.cssText='background:rgba(255,255,255,.04);border:0.5px solid '+(myHat===hh.id?'rgba(167,139,250,.5)':'rgba(255,255,255,.08)')+';border-radius:7px;padding:4px 2px;cursor:pointer;text-align:center;transition:all .15s';
+      var isvg='<svg width="'+pd2+'" height="'+ptH2+'" viewBox="0 0 '+pd2+' '+ptH2+'" xmlns="http://www.w3.org/2000/svg">';
+      isvg+='<circle cx="'+pd2/2+'" cy="'+pcy2+'" r="'+pr2+'" fill="#a78bfa33" stroke="#a78bfa44" stroke-width="1"/>';
+      if(hh.id!=='none')isvg+=getHatSVG(hh.id,pd2/2,pcy2,pr2,'#a78bfa');
+      isvg+='</svg>';
+      iel.innerHTML=isvg;
+      (function(hid,el2){el2.addEventListener('click',function(e){e.stopPropagation();myHat=hid;buildHatPicker();renderPlanets();});})(hh.id,iel);
+      inlineOpts.appendChild(iel);
+    }
+  }
   var pr=14;var pd=pr*2+12;var pcy=pd/2+Math.round(pr*0.65);var ptH=pd+Math.round(pr*0.65);
   for(var i=0;i<HATS.length;i++){
     var h=HATS[i],el=document.createElement('div');
@@ -463,6 +469,23 @@ function buildHatPicker(){
   }
 }
 buildHatPicker();
+
+// Ring toggle
+function toggleRing(){
+  myRing=!myRing;
+  var tog=document.getElementById('tog-ring');
+  if(tog)tog.className=myRing?'toggle on':'toggle';
+  var togP=document.getElementById('tog-ring-panel');
+  if(togP)togP.className=myRing?'toggle on':'toggle';
+  renderPlanets();scheduleSave&&scheduleSave();
+}
+document.getElementById('ring-toggle-row').addEventListener('click',function(e){
+  e.stopPropagation();toggleRing();
+});
+// Ring panel toggle
+document.getElementById('tog-ring-panel').addEventListener('click',function(e){
+  e.stopPropagation();toggleRing();
+});
 
 // Build color swatches
 var myColor2="#60a5fa";
@@ -553,8 +576,6 @@ function hsvToHex(h,s,v){
   return '#'+toH(r2)+toH(g2)+toH(b2);
 }
 
-// legacy helpers removed
-
 function initColorWheel(canvasId, previewId, hexId, getColor, setColor){
   var canvas=document.getElementById(canvasId);
   var preview=document.getElementById(previewId);
@@ -624,7 +645,6 @@ function buildColorSection(){
   // Preview bar
   var prev=document.getElementById('grad-preview');
   if(prev)prev.style.background=myGradient?'linear-gradient('+myGradAngle+'deg,'+myColor+','+myColor2+')':myColor;
-  // Gstyle (legacy compat — hidden but listeners need to fire)
   document.querySelectorAll('.gstyle').forEach(function(g){g.className='gstyle'+(g.dataset.gs===myGradStyle?' active':'');});
 }
 
@@ -635,6 +655,23 @@ function ensureWheels(){
   initColorWheel('color-wheel','color-preview','color-hex',function(){return myColor;},function(v){myColor=v;document.documentElement.style.setProperty('--me-color',v);});
   initColorWheel('color-wheel2','color-preview2','color-hex2',function(){return myColor2;},function(v){if(myGradient)myColor2=v;});
 }
+
+// Update mini color preview in dropdown header
+function updateColorMiniPreview(){
+  var mini=document.getElementById('color-preview-mini');
+  if(mini)mini.style.background=myGradient?'linear-gradient(135deg,'+myColor+','+myColor2+')':myColor;
+}
+
+// Dropdown toggle for color section
+var colorSectionOpen=false;
+document.getElementById('color-section-header').addEventListener('click',function(){
+  colorSectionOpen=!colorSectionOpen;
+  var body=document.getElementById('color-section-body');
+  var chevron=document.getElementById('color-section-chevron');
+  body.style.display=colorSectionOpen?'flex':'none';
+  chevron.style.transform=colorSectionOpen?'rotate(180deg)':'';
+  if(colorSectionOpen){setTimeout(ensureWheels,0);buildColorSection();}
+});
 
 buildColorSection();
 document.getElementById('gradient-toggle').addEventListener('click',function(){
@@ -659,7 +696,7 @@ function makePlanetSVG(u,r){
   var d=r*2+20,totalH=d+hatExtra;
   var cols=getUserColors(u);
   var c0=cols[0],c1=cols[1],c2=cols[2];
-  var hasRing=u.songs>50;
+  var hasRing=u.me?myRing:(u.ring!==undefined?u.ring:u.songs>50);
   var cx=d/2,cy=d/2+hatExtra;
 
   var s='<defs>';
@@ -691,15 +728,25 @@ function makePlanetSVG(u,r){
     var gs=GRADIENT_STYLES[uGrad]||GRADIENT_STYLES.nebula;
     s+='<linearGradient id="'+p+'ov" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="'+gs.a+'"/><stop offset="100%" stop-color="'+gs.b+'"/></linearGradient>';
   }
+  // Ring clip paths: upper half (behind planet) and lower half (in front)
+  if(hasRing){
+    s+='<clipPath id="'+p+'rback"><rect x="'+(cx-r*2)+'" y="'+(cy-r*2)+'" width="'+(r*4)+'" height="'+(r*2)+'"/></clipPath>';
+    s+='<clipPath id="'+p+'rfront"><rect x="'+(cx-r*2)+'" y="'+cy+'" width="'+(r*4)+'" height="'+(r*2)+'"/></clipPath>';
+  }
   s+='<clipPath id="'+p+'cl"><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'"/></clipPath></defs>';
 
   s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(r*1.38)+'" fill="'+c1+'12"/>';
   s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(r*1.16)+'" fill="'+c1+'0d"/>';
-  if(hasRing){var rw=r*1.62,rh=r*.2;s+='<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rw+'" ry="'+rh+'" fill="none" stroke="'+c0+'38" stroke-width="4"/><ellipse cx="'+cx+'" cy="'+cy+'" rx="'+(rw*.8)+'" ry="'+(rh*.65)+'" fill="none" stroke="'+c1+'25" stroke-width="2"/>';}
+  if(hasRing){
+    var rw=r*1.62,rh=r*.22;
+      s+='<g clip-path="url(#'+p+'rback)">';
+    s+='<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rw+'" ry="'+rh+'" fill="none" stroke="'+c0+'50" stroke-width="3.5"/>';
+    s+='<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+(rw*.78)+'" ry="'+(rh*.6)+'" fill="none" stroke="'+c1+'30" stroke-width="2"/>';
+    s+='</g>';
+  }
   s+='<g clip-path="url(#'+p+'cl)">';
   if(hasLinearGrad){
-    // Two-color linear gradient base with sphere shading — same path for me and others
-    var gc1b=u.me?myColor:c0;
+      var gc1b=u.me?myColor:c0;
     var gc2b=u.me?myColor2:(uColor2||c0);
     var midC=lerpColor(gc1b,gc2b,.5);
     s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="url(#'+p+'col)"/>';
@@ -720,6 +767,13 @@ function makePlanetSVG(u,r){
     }
   }
   s+='</g>';
+  if(hasRing){
+    var rw=r*1.62,rh=r*.22;
+    s+='<g clip-path="url(#'+p+'rfront)">';
+    s+='<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rw+'" ry="'+rh+'" fill="none" stroke="'+c0+'cc" stroke-width="3.5"/>';
+    s+='<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+(rw*.78)+'" ry="'+(rh*.6)+'" fill="none" stroke="'+c1+'55" stroke-width="2"/>';
+    s+='</g>';
+  }
   if(u.me){
     s+=getHatSVG(myHat,cx,cy,r,c0);
     s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(r+4)+'" fill="none" stroke="'+c0+(OPT_ANIM?'3a':'22')+'" stroke-width="1" stroke-dasharray="3 4"/>';
@@ -732,12 +786,40 @@ function makePlanetSVG(u,r){
 
 function computeVisible(){
   visibleIds=new Set();var q=searchQ.toLowerCase().trim();
+  var isFiltering=q.length>0||activeKeyword;
   var kwG=null;if(q&&KEYWORD_MAP[q])kwG=KEYWORD_MAP[q];else if(activeKeyword&&KEYWORD_MAP[activeKeyword])kwG=KEYWORD_MAP[activeKeyword];
-  var added=0;
+
+  // Build candidate list with match flag
+  var candidates=[];
   for(var i=0;i<USERS.length;i++){
     var u=USERS[i];if(u.me)continue;
-    var ms=true;if(q)ms=kwG?(kwG.indexOf(u.genre)>=0):(u.name.toLowerCase().indexOf(q)>=0||u.genre.toLowerCase().indexOf(q)>=0);
-    if(ms&&added<PLANET_LIMIT){visibleIds.add(u.id);added++;}
+    if(u.userAdded){visibleIds.add(u.id);continue;}
+    var uGenres=u.genres||[u.genre];
+    var uVibes=(u.customTags||[]);
+    var ms=true;
+    if(isFiltering){
+      if(kwG){ms=uGenres.some(function(g){return kwG.indexOf(g)>=0;});}
+      else{ms=u.name.toLowerCase().indexOf(q)>=0
+        ||uGenres.some(function(g){return g.toLowerCase().indexOf(q)>=0||(GENRE_VIBES[g]||'').toLowerCase().indexOf(q)>=0;})
+        ||uVibes.some(function(t){return t.toLowerCase().indexOf(q)>=0;});}
+    }
+    if(ms)candidates.push(u);
+  }
+
+  if(isFiltering){
+    // Show all matches when filtering
+    candidates.forEach(function(u){visibleIds.add(u.id);});
+  } else {
+      var cx=W/2-offsetX*scale, cy=H/2-offsetY*scale; // approximate screen center in world
+    candidates.sort(function(a,b){
+      var pa=getPos(a.id),pb=getPos(b.id);
+      var da=Math.sqrt(Math.pow(pa.x-W/2,2)+Math.pow(pa.y-H/2,2));
+      var db=Math.sqrt(Math.pow(pb.x-W/2,2)+Math.pow(pb.y-H/2,2));
+      return da-db;
+    });
+    for(var j=0;j<Math.min(candidates.length,PLANET_LIMIT);j++){
+      visibleIds.add(candidates[j].id);
+    }
   }
   visibleIds.add(0);
 }
@@ -760,23 +842,69 @@ function renderPlanets(){
     svgEl.style.filter='brightness('+PL_BRIGHT+'%) saturate('+PL_SAT+'%)'+(PL_GLOW>0?' drop-shadow(0 0 '+(PL_GLOW*0.14)+'px '+getUserColors(u)[0]+(Math.round(PL_GLOW*1.2+100).toString(16))+')'  :'');
     if(u.me){
       (function(el,user){
-        el.addEventListener('click',function(e){
+        var mDragX,mDragY,mPosX,mPosY,mDidDrag=false;
+        el.addEventListener('mousedown',function(e){
+          mDragX=e.clientX;mDragY=e.clientY;
+          mPosX=user.pos.x||0.48;mPosY=user.pos.y||0.46;
+          mDidDrag=false;
+          function onMove(ev){
+            var dx=(ev.clientX-mDragX)/scale/(W*2.2);
+            var dy=(ev.clientY-mDragY)/scale/(H*2.2);
+            if(Math.abs(ev.clientX-mDragX)>4||Math.abs(ev.clientY-mDragY)>4)mDidDrag=true;
+            if(!mDidDrag)return;
+            user.pos={x:mPosX+dx,y:mPosY+dy};
+            renderPlanets();
+          }
+          function onUp(){
+            document.removeEventListener('mousemove',onMove);
+            document.removeEventListener('mouseup',onUp);
+            if(!mDidDrag){
+              openPanel(user);
+            }
+          }
+          document.addEventListener('mousemove',onMove);
+          document.addEventListener('mouseup',onUp);
           e.stopPropagation();
-          var rect=el.getBoundingClientRect();
-          var ly=e.clientY-rect.top;
-          var r2=radius(user.songs)*scale;
-          // hat zone is top hatExtra fraction
-          if(ly<r2*0.82){openHatPicker(e);}
-          else{openPanel(user);}
         });
       })(svgEl,u);
     } else {
-      (function(user,el){el.addEventListener('click',function(e){e.stopPropagation();openPanel(user);});})(u,svgEl);
+      (function(user,el){
+        var dragStartX,dragStartY,dragStartPosX,dragStartPosY,didDrag=false;
+        el.addEventListener('mousedown',function(e){
+          if(!user.userAdded&&!user.me)return; // only draggable for your planets
+          dragStartX=e.clientX;dragStartY=e.clientY;
+          dragStartPosX=user.pos.x;dragStartPosY=user.pos.y;
+          didDrag=false;
+          el.style.cursor='grabbing';
+          function onMove(ev){
+            var dx=(ev.clientX-dragStartX)/scale/(W*2.2);
+            var dy=(ev.clientY-dragStartY)/scale/(H*2.2);
+            if(Math.abs(ev.clientX-dragStartX)>4||Math.abs(ev.clientY-dragStartY)>4)didDrag=true;
+            if(!didDrag)return;
+            user.pos.x=dragStartPosX+dx;
+            user.pos.y=dragStartPosY+dy;
+            renderPlanets();
+          }
+          function onUp(){
+            el.style.cursor='pointer';
+            document.removeEventListener('mousemove',onMove);
+            document.removeEventListener('mouseup',onUp);
+            if(!didDrag){e.stopPropagation();openPanel(user);}
+            else{scheduleSave&&scheduleSave();}
+          }
+          document.addEventListener('mousemove',onMove);
+          document.addEventListener('mouseup',onUp);
+          e.stopPropagation();
+        });
+        el.addEventListener('click',function(e){
+          if(!didDrag){e.stopPropagation();if(!user.userAdded)openPanel(user);}
+        });
+      })(u,svgEl);
     }
     wrap.appendChild(svgWrap);planetsLayer.appendChild(wrap);
   }
 }
-function renderAll(){renderPlanets();buildDiscovery();}
+function renderAll(){renderPlanets();buildDiscovery();updateColorMiniPreview&&updateColorMiniPreview();if(currentUser)scheduleSave();}
 
 function openHatPicker(e){
   var picker=document.getElementById('hat-picker');
@@ -794,16 +922,45 @@ function openPanel(u){
   openedUserId=u.id;
   var cols=getUserColors(u);
   document.getElementById('pav').style.background=cols[1]+'40';document.getElementById('pav').style.color=cols[0];document.getElementById('pav').textContent=u.initials;
-  document.getElementById('pname').textContent=u.me?'you (your planet)':u.name;
-  document.getElementById('pmeta').textContent=u.songs+' songs · '+u.genre;
-  var pg=document.getElementById('pgenre');pg.textContent=u.genre;pg.style.background=cols[0]+'20';pg.style.color=cols[0];
+  if(u.userAdded){
+    var pnameEl=document.getElementById('pname');
+    pnameEl.contentEditable='false';
+    pnameEl.style.outline='none';
+    pnameEl.style.borderBottom='none';
+    pnameEl.style.cursor='';
+    pnameEl.title='';
+    var meDisplay2=currentUser?currentUser.username+' (you)':'Username (you)';
+    pnameEl.textContent=meDisplay2;
+    pnameEl.oninput=function(){
+      u.name=pnameEl.textContent.trim().toLowerCase().slice(0,20)||'you';
+      u.initials=u.name.slice(0,2).toUpperCase();
+      renderPlanets();scheduleSave&&scheduleSave();
+    };
+    pnameEl.onblur=function(){
+      pnameEl.contentEditable='false';
+      pnameEl.style.borderBottom='none';pnameEl.style.cursor='';
+    };
+    pnameEl.onfocus=function(){pnameEl.style.borderBottom='0.5px dashed rgba(167,139,250,.5)';};
+  } else {
+    var pnameEl=document.getElementById('pname');
+    pnameEl.contentEditable='false';pnameEl.style.borderBottom='none';pnameEl.style.cursor='';pnameEl.oninput=null;
+    var meDisplay=currentUser?currentUser.username+' (you)':'Username (you)';
+    pnameEl.textContent=u.me?meDisplay:u.name;
+  }
+  // For user-added planets with a Spotify ID, show playlist title cleanly (not the raw slug)
+  var genres=u.genres||[u.genre];
+  document.getElementById('pmeta').textContent=u.songs+' songs · '+genres.join(', ');
+  // Render genre tags row
+
   var ar=document.getElementById('action-row'),lb=document.getElementById('like-btn'),cb=document.getElementById('connect-btn');
   var cs=document.getElementById('color-section');
+  // Reset suggestions state when switching planets
+  genreSuggestionsOpen=false;
+  var sugPanel=document.getElementById('genre-suggestions');
+  if(sugPanel)sugPanel.style.display='none';
+
   if(u.me){
-    ar.style.display='none';
-    cs.className='visible';
-    buildColorSection();
-    setTimeout(ensureWheels,0);
+    ar.style.display='none';cs.className='visible';buildColorSection();updateColorMiniPreview();
   } else {
     ar.style.display='flex';cs.className='';
     var me=USERS[0],isLiked=me.likes.indexOf(u.id)>=0,isConn=me.connections.indexOf(u.id)>=0;
@@ -811,27 +968,87 @@ function openPanel(u){
     if(isConn){cb.style.display='block';cb.className='connected';cb.textContent='✓ Connected';}
     else if(isLiked){cb.style.display='block';cb.className='';cb.textContent='⟶ Connect';}
     else{cb.style.display='none';}
+    var spab=document.getElementById('sp-action-btn');
+    if(spab){
+      if(u.spotifyId){spab.style.display='flex';spab.href='https://open.spotify.com/playlist/'+u.spotifyId;}
+      else{spab.style.display='none';}
+    }
+  }
+  buildGenrePicker(u,false);
+  // For user-added planets: show links to your other added planets
+  var myPlanetsSection=document.getElementById('my-planets-section');
+  if(!myPlanetsSection){
+    myPlanetsSection=document.createElement('div');myPlanetsSection.id='my-planets-section';
+    document.getElementById('pconn').parentNode.insertBefore(myPlanetsSection,document.getElementById('pconn'));
+  }
+  myPlanetsSection.innerHTML='';
+  if(u.userAdded){
+    var myOthers=USERS.filter(function(x){return x.userAdded&&x.id!==u.id;});
+    if(myOthers.length){
+      var h=document.createElement('div');h.style.cssText='font-size:9px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px';h.textContent='Your other planets';
+      myPlanetsSection.appendChild(h);
+      var chips=document.createElement('div');chips.style.cssText='display:flex;flex-wrap:wrap;gap:5px';
+      myOthers.forEach(function(op){
+        var isLinked=u.connections.indexOf(op.id)>=0||op.connections.indexOf(u.id)>=0;
+        var chip=document.createElement('div');
+        chip.style.cssText='display:flex;align-items:center;gap:5px;padding:4px 9px;border-radius:8px;border:0.5px solid '+(isLinked?'rgba(167,139,250,.35)':'rgba(255,255,255,.08)')+';background:'+(isLinked?'rgba(167,139,250,.1)':'rgba(255,255,255,.03)')+';cursor:pointer;font-size:10px;color:'+(isLinked?'#a78bfa':'rgba(255,255,255,.45)');
+        var dot=document.createElement('span');dot.style.cssText='width:7px;height:7px;border-radius:50%;background:'+getUserColors(op)[0]+';flex-shrink:0';
+        chip.appendChild(dot);
+        var lbl=document.createElement('span');lbl.textContent=(op.playlistTitle||op.name).slice(0,16);chip.appendChild(lbl);
+        if(isLinked){var tick=document.createElement('span');tick.textContent='✓';tick.style.cssText='font-size:9px;color:#a78bfa';chip.appendChild(tick);}
+        chip.addEventListener('click',function(){
+          // Toggle connection between this planet and the other
+          var idxA=u.connections.indexOf(op.id),idxB=op.connections.indexOf(u.id);
+          if(idxA>=0){u.connections.splice(idxA,1);if(idxB>=0)op.connections.splice(idxB,1);}
+          else{u.connections.push(op.id);op.connections.push(u.id);}
+          renderAll();scheduleSave&&scheduleSave();openPanel(u);
+        });
+        chips.appendChild(chip);
+      });
+      myPlanetsSection.appendChild(chips);
+    }
   }
   var ps=document.getElementById('psongs');ps.innerHTML='';
+  // Reset flex state from any previous Spotify embed
+  ps.style.flex='';ps.style.minHeight='';ps.style.display='flex';ps.style.flexDirection='column';
+
+  // For Spotify planets: show the playlist as a regular list + open button
+  // For demo planets: show their hardcoded playlist
+  // Either way, render song rows the same way
+  var playlist=u.playlist||[];
+  // Non-Spotify planets show their track list
+  if(!u.spotifyId){
+    for(var i=0;i<playlist.length;i++){
+      var s=playlist[i];
+      var row=document.createElement('div');row.className='srow';
+      row.innerHTML='<span class="snum">'+(i+1)+'</span><div class="si"><div class="st">'+s.t+'</div><div class="sa">'+s.a+'</div></div><span class="sd">'+s.d+'</span>';
+      ps.appendChild(row);
+    }
+  }
+
+  // All Spotify planets get the full embed
   if(u.spotifyId){
-    // Spotify embed player
+    ps.innerHTML='';
     var embedWrap=document.createElement('div');
-    embedWrap.style.cssText='border-radius:12px;overflow:hidden;margin-top:2px';
+    embedWrap.style.cssText='border-radius:12px;overflow:hidden;flex:1;min-height:0;display:flex;flex-direction:column';
     var iframe=document.createElement('iframe');
     iframe.src='https://open.spotify.com/embed/playlist/'+u.spotifyId+'?utm_source=generator&theme=0';
-    iframe.width='100%';iframe.height='352';
-    iframe.setAttribute('frameBorder','0');
-    iframe.setAttribute('allowfullscreen','');
+    iframe.width='100%';iframe.height='100%';
+    iframe.setAttribute('frameBorder','0');iframe.setAttribute('allowfullscreen','');
     iframe.setAttribute('allow','autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture');
     iframe.setAttribute('loading','lazy');
-    iframe.style.cssText='border-radius:12px;display:block';
+    iframe.style.cssText='border-radius:12px;display:block;flex:1;min-height:0';
     embedWrap.appendChild(iframe);
+    ps.style.flex='1';ps.style.minHeight='0';
     ps.appendChild(embedWrap);
-  } else {
-    for(var i=0;i<u.playlist.length;i++){var s=u.playlist[i];var row=document.createElement('div');row.className='srow';row.innerHTML='<span class="snum">'+(i+1)+'</span><div class="si"><div class="st">'+s.t+'</div><div class="sa">'+s.a+'</div></div><span class="sd">'+s.d+'</span>';ps.appendChild(row);}
   }
   var pc=document.getElementById('pconn');pc.innerHTML='';
-  if(u.connections.length){var h4=document.createElement('h4');h4.textContent='Connected to';pc.appendChild(h4);var chips=document.createElement('div');for(var c=0;c<u.connections.length;c++){var cu=getUserById(u.connections[c]);if(!cu)continue;var chip=document.createElement('div');chip.className='cchip';var cc2=getUserColors(cu);chip.innerHTML='<span class="cdot" style="background:'+cc2[0]+'"></span>'+(cu.me?'you':cu.name);(function(u2){chip.addEventListener('click',function(){openPanel(u2);});})(cu);chips.appendChild(chip);}pc.appendChild(chips);}
+  if(u.connections.length){var h4=document.createElement('h4');h4.textContent='Connected to';pc.appendChild(h4);var chips=document.createElement('div');for(var c=0;c<u.connections.length;c++){var cu=getUserById(u.connections[c]);if(!cu)continue;var chip=document.createElement('div');chip.className='cchip';var cc2=getUserColors(cu);chip.innerHTML='<span class="cdot" style="background:'+cc2[0]+'"></span>'+(cu.me?(currentUser?currentUser.username+' (you)':'Username (you)'):cu.name);(function(u2){chip.addEventListener('click',function(){openPanel(u2);});})(cu);chips.appendChild(chip);}pc.appendChild(chips);}
+  // Stats and compare
+  var stats=document.getElementById('stats-section');
+  var cmpBtn=document.getElementById('compare-btn');
+  if(u.me){stats.className='visible';buildStats();if(cmpBtn)cmpBtn.style.display='none';}
+  else{stats.className='';var isConn2=USERS[0].connections.indexOf(u.id)>=0;if(cmpBtn)cmpBtn.style.display=isConn2?'block':'none';}
   document.getElementById('panel').classList.add('open');
 }
 
@@ -890,7 +1107,10 @@ document.getElementById('pcls').addEventListener('click',function(){document.get
 
 // ── Discovery engine ──
 var DISCOVERY_REASONS=[
-  function(u,me){if(u.genre===me.genre)return 'same vibe as you';return null;},
+  function(u,me){
+    var ug=u.genres||[u.genre],mg=me.genres||[me.genre];
+    if(ug.some(function(g){return mg.indexOf(g)>=0;}))return 'same vibe as you';return null;
+  },
   function(u,me){
     // friend-of-friend: connected to someone you're connected to
     for(var i=0;i<me.connections.length;i++){
@@ -900,7 +1120,7 @@ var DISCOVERY_REASONS=[
   },
   function(u,me){
     // near genre cluster
-    var myCC=CLUSTER_CENTERS[me.genre],theirCC=CLUSTER_CENTERS[u.genre];
+    var myCC=CLUSTER_CENTERS[(me.genres&&me.genres[0])||me.genre],theirCC=CLUSTER_CENTERS[(u.genres&&u.genres[0])||u.genre];
     if(!myCC||!theirCC)return null;
     var dx=myCC.x-theirCC.x,dy=myCC.y-theirCC.y,d=Math.sqrt(dx*dx+dy*dy);
     if(d<0.28)return 'close in the universe';return null;
@@ -948,9 +1168,7 @@ function buildDiscovery(){
     card.addEventListener('click',function(){
       // Pan camera to this planet
       var wp=getWorldPos(u.id);
-      offsetX=W/2-wp.x;offsetY=H/2-wp.y;
-      renderPlanets();
-      setTimeout(function(){openPanel(u);},80);
+      panTo(W/2-wp.x, H/2-wp.y, function(){openPanel(u);});
     });
     cards.appendChild(card);
   });
@@ -971,8 +1189,36 @@ for(var ki=0;ki<KEYWORD_SUGGESTIONS.length;ki++){
 }
 document.getElementById('search-input').addEventListener('input',function(e){searchQ=e.target.value;activeKeyword=null;document.querySelectorAll('.stag').forEach(function(t){t.classList.remove('active');});renderPlanets();});
 
-root.addEventListener('mousedown',function(e){if(zoomDragging)return;if(e.target.closest('svg')||e.target.closest('#panel')||e.target.closest('#topbar')||e.target.closest('#sidebar')||e.target.closest('#add-panel')||e.target.closest('#zoom-bar')||e.target.closest('#hat-picker')||e.target.closest('#settings-panel')||e.target.closest('#settings-btn')||e.target.closest('#auth-popup')||e.target.closest('#auth-btn')||e.target.closest('#activity-panel')||e.target.closest('#activity-btn')||e.target.closest('#compare-modal')||e.target.closest('#onboard-overlay')||e.target.closest('#help-btn'))return;panDragging=true;panSX=e.clientX;panSY=e.clientY;panOX=offsetX;panOY=offsetY;root.style.cursor='grabbing';});
+root.addEventListener('mousedown',function(e){if(zoomDragging)return;if(e.target.closest('svg')||e.target.closest('#panel')||e.target.closest('#topbar')||e.target.closest('#sidebar')||e.target.closest('#add-panel')||e.target.closest('#zoom-bar')||e.target.closest('#hat-picker')||e.target.closest('#settings-panel')||e.target.closest('#settings-btn')||e.target.closest('#auth-popup')||e.target.closest('#auth-btn')||e.target.closest('#activity-panel')||e.target.closest('#activity-btn')||e.target.closest('#compare-modal')||e.target.closest('#onboard-overlay')||e.target.closest('#help-btn')||e.target.closest('#recenter-btn'))return;panDragging=true;panSX=e.clientX;panSY=e.clientY;panOX=offsetX;panOY=offsetY;});
 root.addEventListener('touchstart',function(e){var t=e.touches[0];panDragging=true;panSX=t.clientX;panSY=t.clientY;panOX=offsetX;panOY=offsetY;},{passive:true});
+
+// Double-click blank space to create a new planet there
+root.addEventListener('dblclick',function(e){
+  if(e.target.closest('svg')||e.target.closest('#panel')||e.target.closest('#topbar')||e.target.closest('#sidebar')||e.target.closest('#add-panel')||e.target.closest('#zoom-bar')||e.target.closest('#hat-picker')||e.target.closest('#settings-panel')||e.target.closest('#settings-btn')||e.target.closest('#auth-popup')||e.target.closest('#auth-btn')||e.target.closest('#activity-panel')||e.target.closest('#activity-btn'))return;
+  // Convert click position to world coords and spawn planet there
+  var rect=root.getBoundingClientRect();
+  var sx=e.clientX-rect.left, sy=e.clientY-rect.top;
+  var cx=root.offsetWidth/2, cy=root.offsetHeight/2;
+  var wx=(sx-cx)/scale+cx-offsetX;
+  // Reverse worldToScreen: sx = cx + (wx - cx + offsetX)*scale  =>  wx = sx/scale - offsetX + cx*(1 - 1/scale)
+  var wx = sx/scale - offsetX + cx*(1 - 1/scale);
+  var wy = sy/scale - offsetY + cy*(1 - 1/scale);
+  // Reverse getWorldPos: wx = pos.x*W*2.2 - W*0.6  =>  pos.x = (wx + W*0.6)/(W*2.2)
+  var normX = (wx + root.offsetWidth*0.6) / (root.offsetWidth*2.2);
+  var normY = (wy + root.offsetHeight*0.6) / (root.offsetHeight*2.2);
+  var pal=PALETTE[nextPaletteIdx%PALETTE.length];nextPaletteIdx++;
+  var genre=GENRE_LIST[Math.floor(Math.random()*GENRE_LIST.length)];
+  var gradStyles=["nebula","aurora","lava","ice","void",null,null];
+  var newU={id:nextId,name:currentUser?currentUser.username:'you',songs:Math.floor(Math.random()*40)+10,genre:genre,
+    connections:[],likes:[],initials:(currentUser?currentUser.username:'you').slice(0,2).toUpperCase(),
+    baseColor:myColor,baseColor2:myGradient?myColor2:null,gradAngle:myGradAngle||135,
+    gradient:myGradient?myGradStyle:null,
+    pos:{x:normX,y:normY},spotifyId:null,userAdded:true,
+    playlist:[{t:'Track 1',a:'Artist A',d:'3:12'},{t:'Track 2',a:'Artist B',d:'4:05'}]};
+  USERS.push(newU);nextId++;
+  separatePlanets();renderPlanets();
+  setTimeout(function(){openPanel(newU);},100);
+});
 document.addEventListener('touchmove',function(e){if(!panDragging)return;var t=e.touches[0];offsetX=panOX+(t.clientX-panSX)/scale;offsetY=panOY+(t.clientY-panSY)/scale;renderPlanets();},{passive:true});
 document.addEventListener('touchend',function(){panDragging=false;});
 
@@ -988,18 +1234,35 @@ function spawnPlanet(name, songs, spotifyId, coverColor){
   var baseColor=coverColor||pal[0];
   var genre=GENRE_LIST[Math.floor(Math.random()*GENRE_LIST.length)];
   var cc=CLUSTER_CENTERS[genre]||{x:.5,y:.5};
-  var angle=Math.random()*Math.PI*2,spread=.07+Math.random()*.05;
-  var bp={x:Math.max(.05,Math.min(.95,cc.x+Math.cos(angle)*spread)),y:Math.max(.05,Math.min(.92,cc.y+Math.sin(angle)*spread))};
-  var gradStyles=["nebula","aurora","lava","ice","void",null,null];
-  var rndGrad=gradStyles[Math.floor(Math.random()*gradStyles.length)];
-  var displayName=(name||('planet'+nextId)).toLowerCase().slice(0,20);
-  var newUser={id:nextId,name:displayName,songs:songs||30,genre:genre,connections:[],likes:[],
-    initials:displayName.slice(0,2).toUpperCase(),baseColor:baseColor,gradient:rndGrad,pos:bp,
-    spotifyId:spotifyId||null,
-    playlist:[{t:"Open Spotify to play",a:"Embedded player below",d:""}]};
+  var angle=Math.random()*Math.PI*2;
+  var spread=0.12+Math.random()*0.22;
+  var bp={x:Math.max(.06,Math.min(.94,cc.x+Math.cos(angle)*spread)),y:Math.max(.06,Math.min(.92,cc.y+Math.sin(angle)*spread))};
+  // Inherit "you" planet's colors and style so all your planets look like yours
+  var ownerName=currentUser?currentUser.username:'you';
+  var playlistTitle=name&&name!==ownerName?name:null;
+  var myPlanetColor=myColor;  // always use your current color
+  // Generate placeholder tracks that look like real ones for duration calculation
+  var fakeSongs=songs||Math.floor(Math.random()*30)+15;
+  var fakePl=[];
+  var avgMin=3+Math.floor(Math.random()*2);
+  for(var fi=0;fi<Math.min(fakeSongs,8);fi++){
+    var fm=avgMin+Math.floor(Math.random()*2),fs=Math.floor(Math.random()*60);
+    fakePl.push({t:'Track '+(fi+1),a:'—',d:fm+':'+(fs<10?'0':'')+fs});
+  }
+  var newUser={id:nextId,name:ownerName,songs:fakeSongs,genre:genre,connections:[],likes:[],
+    initials:ownerName.slice(0,2).toUpperCase(),
+    baseColor:myPlanetColor,baseColor2:myGradient?myColor2:null,
+    gradAngle:myGradAngle||135,gradient:myGradient?myGradStyle:null,
+    pos:bp,spotifyId:spotifyId||null,owner:ownerName,playlistTitle:playlistTitle,
+    playlist:fakePl};
+  newUser.userAdded=true;
   USERS.push(newUser);nextId++;
   separatePlanets();renderPlanets();
-  setTimeout(function(){openPanel(newUser);},120);
+  // Pan camera to the new planet so it's always visible
+  setTimeout(function(){
+    var wp=getWorldPos(newUser.id);
+    panTo(W/2-wp.x, H/2-wp.y, function(){openPanel(newUser);});
+  },120);
   return newUser;
 }
 
@@ -1010,23 +1273,19 @@ document.getElementById('add-btn').addEventListener('click',function(){
   var spotifyId=extractSpotifyId(val);
 
   if(spotifyId){
-    btn.textContent='Loading…';btn.style.opacity='.6';
-    // Use oEmbed to get playlist title (no auth needed, CORS-friendly via proxy)
+      var planet=spawnPlanet(null, Math.floor(Math.random()*60)+20, spotifyId, null);
+    input.value='';
+    // Then try to fetch the real name and update it
+    btn.textContent='Fetching…';btn.style.opacity='.6';
     var oEmbedUrl='https://open.spotify.com/oembed?url=https://open.spotify.com/playlist/'+spotifyId;
     fetch('https://corsproxy.io/?'+encodeURIComponent(oEmbedUrl))
       .then(function(r){return r.json();})
       .then(function(data){
-        var name=(data.title||'My Playlist').slice(0,22);
-        // Extract a rough color from thumbnail if available (just use a Spotify-y green)
-        var planet=spawnPlanet(name, Math.floor(Math.random()*60)+20, spotifyId, '#1db954');
-        input.value='';
+        var name=(data.title||slug).slice(0,22).toLowerCase();
+        planet.playlistTitle=name; // store playlist title, keep planet name as owner
+        renderPlanets();
       })
-      .catch(function(){
-        // oEmbed failed — still spawn with the URL slug as name
-        var slug=val.replace(/.*playlist[/:]([A-Za-z0-9]+).*/,'$1').slice(0,16);
-        spawnPlanet(slug, Math.floor(Math.random()*40)+15, spotifyId, '#1db954');
-        input.value='';
-      })
+      .catch(function(){/* keep slug name */})
       .finally(function(){
         btn.textContent='+ Add planet';btn.style.opacity='1';
       });
@@ -1044,7 +1303,6 @@ function drawBg(){
   bgCanvas.style.filter='hue-rotate('+BG_HUE+'deg) brightness('+BG_BRIGHT+'%)';
   ctx.fillStyle=bdef.bg;ctx.fillRect(0,0,W,H);
   var gl=Object.keys(CLUSTER_CENTERS);
-  // Nebula clouds — intensity from BG_NEBULA
   var ni=BG_NEBULA/100;
   var clouds=[[.3,.4,bdef.cloud1,.15*ni],[.72,.28,bdef.cloud2,.12*ni],[.5,.72,bdef.cloud3,.1*ni]];
   for(var ci=0;ci<clouds.length;ci++){
@@ -1056,7 +1314,7 @@ function drawBg(){
   }
   // Genre glows
   for(var gi=0;gi<gl.length;gi++){
-    var g=gl[gi],cc=CLUSTER_CENTERS[g],wp={x:cc.x*W*1.35-W*.18,y:cc.y*H*1.35-H*.18},sp=worldToScreen(wp.x,wp.y);
+    var g=gl[gi],cc=CLUSTER_CENTERS[g],wp={x:cc.x*W*2.2-W*.6,y:cc.y*H*2.2-H*.6},sp=worldToScreen(wp.x,wp.y);
     var col=GENRE_COLORS[g]||'#fff',r2=parseInt(col.slice(1,3),16),g2=parseInt(col.slice(3,5),16),b2=parseInt(col.slice(5,7),16);
     var grad=ctx.createRadialGradient(sp.x,sp.y,0,sp.x,sp.y,Math.min(W,H)*.28*scale);
     grad.addColorStop(0,'rgba('+r2+','+g2+','+b2+',.06)');grad.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
@@ -1105,11 +1363,31 @@ function drawBg(){
   }
   // Vibe labels
   if(OPT_VIBES){for(var gi=0;gi<gl.length;gi++){
-    var g=gl[gi],cc=CLUSTER_CENTERS[g],wp={x:cc.x*W*1.35-W*.18,y:cc.y*H*1.35-H*.18},sp=worldToScreen(wp.x,wp.y);
-    var topY=sp.y-80*scale;for(var ui=0;ui<USERS.length;ui++){if(USERS[ui].genre===g){var pp=getPos(USERS[ui].id),rr=radius(USERS[ui].songs)*scale;if(pp.y-rr-24*scale<topY)topY=pp.y-rr-24*scale;}}
-    ctx.save();ctx.font='italic '+(Math.max(9,11*scale))+'px sans-serif';ctx.fillStyle=(GENRE_COLORS[g]||'#fff')+'80';ctx.textAlign='center';ctx.fillText(GENRE_VIBES[g]||g,sp.x,topY);ctx.restore();
+    var g=gl[gi],cc=CLUSTER_CENTERS[g],wp={x:cc.x*W*2.2-W*.6,y:cc.y*H*2.2-H*.6},sp=worldToScreen(wp.x,wp.y);
+    var topY=sp.y-90*scale; // fixed offset above cluster center — no planet dependency
+    ctx.save();
+    // Push label well above the highest planet in the cluster
+    var labelY=topY-18*scale;
+    var fontSize=Math.max(10,13*scale);
+    var label=GENRE_VIBES[g]||g;
+    var col=GENRE_COLORS[g]||'#fff';
+    ctx.font='italic '+fontSize+'px sans-serif';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    // Measure text width for backdrop
+    var tw=ctx.measureText(label).width;
+    var pad=10*scale, ph=fontSize*0.75;
+    // Dark backdrop pill for readability
+    ctx.fillStyle='rgba(4,4,15,0.55)';
+    var bx=sp.x-tw/2-pad, bw=tw+pad*2, br=ph*0.7;
+    ctx.beginPath();
+    ctx.roundRect?ctx.roundRect(bx,labelY-ph,bw,ph*2,br):ctx.rect(bx,labelY-ph,bw,ph*2);
+    ctx.fill();
+    // Colored text, more opaque
+    ctx.fillStyle=col+'cc';
+    ctx.fillText(label,sp.x,labelY);
+    ctx.restore();
   }}
-  // Planet name labels drawn on canvas — always perfectly centered
   if(OPT_LABELS){
     for(var li=0;li<USERS.length;li++){
       var lu=USERS[li];
@@ -1125,20 +1403,24 @@ function drawBg(){
       // Label sits just below planet bottom:
       var hatExtraScaled = Math.round(lr * 0.78);
       var planetScreenCY = lpos.y + hatExtraScaled * 0.5;
-      var labelY = planetScreenCY + lr + 8;
-      var fontSize = Math.max(8, 10*scale);
+      var maxDriftY = 8; // matches max ry in getDriftOffset
+      var labelY = planetScreenCY + lr + maxDriftY + 6;
+      var fontSize = Math.max(9, Math.min(13, lr*0.28 + 7*scale));
       ctx.save();
       ctx.font=(lu.me?'600 ':'')+fontSize+'px sans-serif';
       ctx.fillStyle=lu.me?getUserColors(lu)[0]+'cc':'rgba(255,255,255,.55)';
       ctx.textAlign='center';
       ctx.textBaseline='top';
-      ctx.fillText(lu.me?'you':lu.name, lpos.x, labelY);
+      var meLabel=currentUser?currentUser.username+' (you)':'Username (you)';
+      var labelText=lu.me||lu.userAdded?meLabel:lu.name;
+      ctx.fillText(labelText, lpos.x, labelY);
       ctx.restore();
     }
   }
 
   var drawn={};
-  if(OPT_LINES)for(var u=0;u<USERS.length;u++){var user=USERS[u];for(var c=0;c<user.connections.length;c++){var cid=user.connections[c],key=Math.min(user.id,cid)+'-'+Math.max(user.id,cid);if(drawn[key])continue;drawn[key]=true;var cu=getUserById(cid);if(!cu)continue;var isMe=user.me||cu.me,p1=getPos(user.id),p2=getPos(cid);if(isMe){
+  if(OPT_LINES)for(var u=0;u<USERS.length;u++){var user=USERS[u];if(!user.me&&!visibleIds.has(user.id))continue;for(var c=0;c<user.connections.length;c++){var cid=user.connections[c],key=Math.min(user.id,cid)+'-'+Math.max(user.id,cid);if(drawn[key])continue;drawn[key]=true;var cu=getUserById(cid);if(!cu)continue;// Only draw if both endpoints are visible (or one is me)
+if(!user.me&&!cu.me&&(!visibleIds.has(user.id)||!visibleIds.has(cu.id)))continue;if((user.me||cu.me)&&!visibleIds.has(user.me?cid:user.id))continue;var isMe=user.me||cu.me,p1=getPos(user.id),p2=getPos(cid);if(isMe){
   var segs=6,pts=[];
   for(var si=0;si<=segs;si++){var tt=si/segs,jx=si>0&&si<segs?Math.sin(si*1.9+p1.x*.008)*5*scale:0,jy=si>0&&si<segs?Math.cos(si*2.3+p1.y*.008)*5*scale:0;pts.push({x:p1.x+(p2.x-p1.x)*tt+jx,y:p1.y+(p2.y-p1.y)*tt+jy});}
   var col_me=getUserColors(USERS[0])[0];
@@ -1150,7 +1432,6 @@ function drawBg(){
   ctx.save();ctx.strokeStyle=linGrad;ctx.lineWidth=1.0;ctx.setLineDash([3,6]);
   ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);for(var pi=1;pi<pts.length;pi++)ctx.lineTo(pts[pi].x,pts[pi].y);
   ctx.stroke();ctx.setLineDash([]);
-  // Dot nodes along path — gradient from my color to their
   for(var pi=1;pi<pts.length-1;pi++){
     var dt=pi/segs;
     var dotCol=lerpColor(col_me,col_them,dt);
@@ -1171,6 +1452,29 @@ function drawBg(){
   ctx.save();ctx.strokeStyle=wg;ctx.lineWidth=.7;ctx.setLineDash([2,7]);
   ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();ctx.setLineDash([]);ctx.restore();
 }}}
+}
+
+// Smooth animated camera pan
+var panAnim=null;
+function panTo(targetX, targetY, onDone){
+  if(panAnim){cancelAnimationFrame(panAnim);panAnim=null;}
+  var startX=offsetX, startY=offsetY;
+  var dx=targetX-startX, dy=targetY-startY;
+  var duration=600, start=null;
+  function ease(t){return t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;} // easeInOutQuad
+  var lastRender=-1;
+  function step(ts){
+    if(!start)start=ts;
+    var t=Math.min((ts-start)/duration,1);
+    var e=ease(t);
+    offsetX=startX+dx*e;
+    offsetY=startY+dy*e;
+    // Only rebuild DOM planets every ~4 frames to keep it smooth
+    if(ts-lastRender>64){renderPlanets();lastRender=ts;}
+    if(t<1){panAnim=requestAnimationFrame(step);}
+    else{renderPlanets();panAnim=null;if(onDone)onDone();}
+  }
+  requestAnimationFrame(step);
 }
 
 function updateDriftTransforms(){
@@ -1217,7 +1521,7 @@ var slider=document.getElementById('planet-limit-slider');
 var sliderVal=document.getElementById('planet-limit-val');
 slider.addEventListener('input',function(){
   PLANET_LIMIT=parseInt(this.value);
-  sliderVal.textContent=PLANET_LIMIT>=20?'All':this.value;
+  sliderVal.textContent=PLANET_LIMIT>=30?'All':this.value;
   renderPlanets();
 });
 
@@ -1231,7 +1535,7 @@ var BASE_FONT_SIZES=[
   ['.genre-bar-label',9],['.genre-bar-pct',9],['.st',11],['.sa',9],['.sd',9],
   ['#pname',13],['#pmeta',10],['#pgenre',9],['#connect-btn',11],['#like-btn',11],
   ['#compare-btn',11],['.compare-col-title',9],['.shared-tag',9],
-  ['.snum',9],['.cchip',10],['.fchip',10],['.stag',9],
+  ['.snum',9],['.cchip',10],['.stag',9],
   ['#sb-title',9],['#sb-refresh-label',9],['.sp-section-title',9],
   ['#badge-name',10],['.auth-tab',10],['.auth-input',11],
   ['#auth-submit',12],['#auth-switch',10],['#auth-logo',15],
@@ -1273,7 +1577,6 @@ root.addEventListener('click',function(e){
 });
 document.getElementById('settings-panel').addEventListener('click',function(e){e.stopPropagation();});
 
-
 // ─────────────────────────────────────────
 // AUTH SYSTEM (localStorage demo)
 // ─────────────────────────────────────────
@@ -1285,7 +1588,6 @@ function dbAccounts(){return dbGet('accounts')||{};}
 function dbSaveAccounts(a){dbSet('accounts',a);}
 
 function hashPass(p){
-  // Simple deterministic hash for demo — NOT production-safe
   var h=0;for(var i=0;i<p.length;i++){h=((h<<5)-h)+p.charCodeAt(i);h|=0;}
   return h.toString(36);
 }
@@ -1377,6 +1679,7 @@ function loginAs(acc){
   myGradAngle=acc.gradAngle||135;
   myGradStyle=acc.gradStyle||'nebula';
   myHat=acc.hat||'crown';
+  myRing=acc.ring||false;
   document.documentElement.style.setProperty('--me-color',myColor);
 
   // Restore any planets the user added
@@ -1412,11 +1715,21 @@ function saveUserState(){
   var me=USERS[0];
   currentUser.color=myColor;currentUser.color2=myColor2;
   currentUser.gradient=myGradient;currentUser.gradAngle=myGradAngle;currentUser.gradStyle=myGradStyle;
-  currentUser.hat=myHat;
+  currentUser.hat=myHat;currentUser.ring=myRing;
   currentUser.connections=me.connections.slice();
   currentUser.likes=me.likes.slice();
   // Save added planets (non-original, non-me)
-  currentUser.addedPlanets=USERS.filter(function(u){return u.id>=9&&!u.me;});
+  // Save all non-me non-demo planets the user added
+  currentUser.addedPlanets=USERS.filter(function(u){return u.userAdded;}).map(function(u){return{id:u.id,name:u.name,songs:u.songs,genre:u.genre,genres:u.genres||[u.genre],customTags:u.customTags||[],connections:u.connections.slice(),likes:u.likes.slice(),initials:u.initials,baseColor:u.baseColor,baseColor2:u.baseColor2||null,gradAngle:u.gradAngle||135,gradient:u.gradient||null,pos:u.pos,spotifyId:u.spotifyId||null,userAdded:true,playlist:u.playlist.slice()};});
+var _unused=USERS.filter(function(u){
+    return !u.me && u.id>=nextId-USERS.filter(function(x){return !x.me&&x.id<9;}).length-8;
+  }).map(function(u){
+    return {id:u.id,name:u.name,songs:u.songs,genre:u.genre,connections:u.connections.slice(),
+      likes:u.likes.slice(),initials:u.initials,baseColor:u.baseColor,baseColor2:u.baseColor2||null,
+      gradAngle:u.gradAngle||135,gradient:u.gradient||null,pos:u.pos,
+      spotifyId:u.spotifyId||null,
+      playlist:u.playlist.slice()};
+  });
   var accounts=dbAccounts();
   accounts[currentUser.email]=currentUser;
   dbSaveAccounts(accounts);
@@ -1427,8 +1740,6 @@ var _saveTimer=null;
 function scheduleSave(){clearTimeout(_saveTimer);_saveTimer=setTimeout(saveUserState,800);}
 
 // Patch key state changes to auto-save
-var _origRenderAll=renderAll;
-renderAll=function(){_origRenderAll();if(currentUser)scheduleSave();};
 
 document.getElementById('badge-logout').addEventListener('click',function(e){
   e.stopPropagation();
@@ -1467,27 +1778,32 @@ document.getElementById('auth-popup').addEventListener('click',function(e){e.sto
 (function(){
   var savedEmail=dbGet('session');
   if(savedEmail){var accounts=dbAccounts();var acc=accounts[savedEmail];if(acc){loginAs(acc);return;}}
-  // No session — show the auth button, Orbis still visible
 })();
-
-
 
 // ─────────────────────────────────────────
 // ACTIVITY FEED
 // ─────────────────────────────────────────
+var PAGE_LOAD_TIME=Date.now();
+function relTime(secsAgo){
+  var t=Math.floor((Date.now()-PAGE_LOAD_TIME)/1000)+secsAgo;
+  if(t<60)return t+'s ago';
+  if(t<3600)return Math.floor(t/60)+'m ago';
+  return Math.floor(t/3600)+'h ago';
+}
+var ACTIVITY_OFFSETS=[120,300,720,1080,1860,2640,3660,3900,7200,10800,14400,18000];
 var ACTIVITY_EVENTS=[
-  {text:["<span>deepspace77</span>","liked your planet"],color:"#60a5fa",time:"2m ago"},
-  {text:["<span>velvetfrq</span>","connected with <span>cottonpink</span>"],color:"#f472b6",time:"5m ago"},
-  {text:["<span>solarflare</span>","added a new playlist"],color:"#fbbf24",time:"12m ago"},
-  {text:["<span>nova.wav</span>","connected with <span>you</span>"],color:"#6366f1",time:"18m ago"},
-  {text:["<span>bassweight</span>","liked <span>solarflare</span>'s planet"],color:"#f97316",time:"31m ago"},
-  {text:["<span>lunarsync</span>","joined the galaxy"],color:"#94a3b8",time:"44m ago"},
-  {text:["<span>magnetar</span>","connected with <span>violetdepth</span>"],color:"#fcd34d",time:"1h ago"},
-  {text:["<span>driftcloud9</span>","liked your planet"],color:"#2dd4bf",time:"1h ago"},
-  {text:["<span>pulsewave</span>","added a Spotify playlist"],color:"#22d3ee",time:"2h ago"},
-  {text:["<span>ghostfreq</span>","connected with <span>vantacore</span>"],color:"#1e293b",time:"3h ago"},
-  {text:["<span>blushwave</span>","joined the galaxy"],color:"#fda4af",time:"4h ago"},
-  {text:["<span>ferrowave</span>","liked <span>cottonpink</span>'s planet"],color:"#f9a8d4",time:"5h ago"},
+  {text:["<span>deepspace77</span>","liked your planet"],color:"#60a5fa",off:0},
+  {text:["<span>velvetfrq</span>","connected with <span>cottonpink</span>"],color:"#f472b6",off:1},
+  {text:["<span>solarflare</span>","added a new playlist"],color:"#fbbf24",off:2},
+  {text:["<span>nova.wav</span>","connected with <span>you</span>"],color:"#6366f1",off:3},
+  {text:["<span>bassweight</span>","liked <span>solarflare</span>'s planet"],color:"#f97316",off:4},
+  {text:["<span>lunarsync</span>","joined the galaxy"],color:"#94a3b8",off:5},
+  {text:["<span>magnetar</span>","connected with <span>violetdepth</span>"],color:"#fcd34d",off:6},
+  {text:["<span>driftcloud9</span>","liked your planet"],color:"#2dd4bf",off:7},
+  {text:["<span>pulsewave</span>","added a Spotify playlist"],color:"#22d3ee",off:8},
+  {text:["<span>ghostfreq</span>","connected with <span>vantacore</span>"],color:"#1e293b",off:9},
+  {text:["<span>blushwave</span>","joined the galaxy"],color:"#fda4af",off:10},
+  {text:["<span>ferrowave</span>","liked <span>cottonpink</span>'s planet"],color:"#f9a8d4",off:11},
 ];
 
 function buildActivityFeed(){
@@ -1497,7 +1813,7 @@ function buildActivityFeed(){
     var item=document.createElement('div');item.className='af-item';
     item.innerHTML='<div class="af-dot" style="background:'+ev.color+'"></div>'
       +'<div class="af-text">'+ev.text.join(' ')+'</div>'
-      +'<div class="af-time">'+ev.time+'</div>';
+      +'<div class="af-time">'+relTime(ACTIVITY_OFFSETS[ev.off||0])+'</div>';
     list.appendChild(item);
   });
 }
@@ -1625,9 +1941,9 @@ document.getElementById('compare-btn').addEventListener('click',function(){
 var OB_STEPS=[
   {text:"Welcome to <strong>Orbis</strong> — your music universe. Each planet is a user with their own playlist and vibe.",target:null,pos:'center'},
   {text:"This is <strong>your planet</strong>. Click it to customize your color, hat, and see your listening stats.",target:'#root',pos:'center-planet'},
-  {text:"The <strong>Discover</strong> panel suggests planets you might vibe with. Drag it anywhere on screen.",target:'#sidebar',pos:'right'},
+  {text:"The <strong>Discover</strong> panel suggests planets to explore. Drag it anywhere on screen to reposition it.",target:'#sidebar',pos:'right'},
   {text:"<strong>Search</strong> by name, genre, or mood keywords like 'chill' or 'hype' to filter the galaxy.",target:'#topbar',pos:'below'},
-  {text:"Paste a <strong>Spotify playlist link</strong> to spawn a real planet with an embedded player.",target:'#add-panel',pos:'above'},
+  {text:"Paste a <strong>Spotify playlist link</strong> to spawn a real planet. You can drag your own planets to reposition them.",target:'#add-panel',pos:'above'},
 ];
 var obStep=0;
 
@@ -1683,22 +1999,6 @@ if(!localStorage.getItem('orbis_onboarded')){
 // ─────────────────────────────────────────
 // Hook stats + compare into openPanel
 // ─────────────────────────────────────────
-var _origOpenPanel=openPanel;
-openPanel=function(u){
-  _origOpenPanel(u);
-  var stats=document.getElementById('stats-section');
-  var cmpBtn=document.getElementById('compare-btn');
-  if(u.me){
-    stats.className='visible';
-    buildStats();
-    if(cmpBtn)cmpBtn.style.display='none';
-  } else {
-    stats.className='';
-    var me=USERS[0];
-    var isConn=me.connections.indexOf(u.id)>=0;
-    if(cmpBtn)cmpBtn.style.display=isConn?'block':'none';
-  }
-};
 
 // Close activity on outside click
 root.addEventListener('click',function(e){
@@ -1707,5 +2007,157 @@ root.addEventListener('click',function(e){
   }
 });
 
+// ─────────────────────────────────────────
+// GENRE & TAG PICKER
+// ─────────────────────────────────────────
+var USER_CUSTOM_KEYWORDS={}; // {keyword: [genres]}
+
+var genreSuggestionsOpen=false;
+
+function buildGenrePicker(u, editOpen){
+  var uGenres=u.genres||(u.genres=[u.genre]);
+  var isOwn=u.me||u.userAdded;
+  var display=document.getElementById('genre-tags-display');
+  if(!display)return;
+  display.innerHTML='';
+
+  // Render all genre + custom chips together
+  function makeChip(label, col, clickSearch, removeFn){
+    var chip=document.createElement('span');
+    chip.style.cssText='display:inline-flex;align-items:center;gap:4px;font-size:9px;padding:3px 9px;border-radius:20px;background:'+col+'15;color:'+col+';border:0.5px solid '+col+'35;cursor:pointer;transition:all .15s;user-select:none;white-space:nowrap;flex-shrink:0';
+    function updateChipActive(){
+      var isActive=(searchQ&&(searchQ===label.toLowerCase()||searchQ===label));
+      chip.style.background=isActive?col+'35':col+'15';
+      chip.style.borderColor=isActive?col+'70':col+'35';
+      chip.style.fontWeight=isActive?'600':'400';
+    }
+    updateChipActive();
+    chip.addEventListener('mouseenter',function(){if(!(searchQ&&(searchQ===label.toLowerCase()||searchQ===label)))this.style.background=col+'28';});
+    chip.addEventListener('mouseleave',function(){updateChipActive();});
+    if(removeFn&&isOwn){
+      // show × on hover when in edit mode
+      var lbl=document.createElement('span');lbl.textContent=label;chip.appendChild(lbl);
+      var x=document.createElement('span');x.textContent='×';x.style.cssText='font-size:10px;opacity:0;transition:opacity .15s;color:'+col;chip.appendChild(x);
+      chip.addEventListener('mouseenter',function(){x.style.opacity='0.7';});
+      chip.addEventListener('mouseleave',function(){x.style.opacity='0';});
+      x.addEventListener('click',function(e){e.stopPropagation();removeFn();});
+      chip.addEventListener('click',function(){clickSearch();});
+    } else {
+      chip.textContent=label;
+      chip.addEventListener('click',function(){clickSearch();});
+    }
+    return chip;
+  }
+
+  uGenres.forEach(function(g){
+    var col=GENRE_COLORS[g]||'#a78bfa';
+    display.appendChild(makeChip(
+      GENRE_VIBES[g]||g, col,
+      function(){
+        var si=document.getElementById('search-input');
+        if(searchQ===g.toLowerCase()){
+          // toggle off
+          searchQ='';if(si)si.value='';activeKeyword=null;
+        } else {
+          searchQ=g.toLowerCase();if(si)si.value=g;activeKeyword=null;
+        }
+        computeVisible();renderPlanets();
+        buildGenrePicker(getUserById(openedUserId),false);
+      },
+      null
+    ));
+  });
+
+  (u.customTags||[]).forEach(function(t){
+    display.appendChild(makeChip(
+      t,'#a78bfa',
+      function(){
+        var si=document.getElementById('search-input');
+        if(searchQ===t){
+          searchQ='';if(si)si.value='';activeKeyword=null;
+        } else {
+          searchQ=t;if(si)si.value=t;activeKeyword=null;
+        }
+        computeVisible();renderPlanets();
+        buildGenrePicker(getUserById(openedUserId),false);
+      },
+      isOwn?function(){var i=(u.customTags||[]).indexOf(t);if(i>=0)u.customTags.splice(i,1);buildGenrePicker(u,true);scheduleSave&&scheduleSave();}:null
+    ));
+  });
+
+  // + circle button (yours only)
+  if(isOwn){
+    var addBtn=document.createElement('span');
+    addBtn.id='genre-add-circle';
+    addBtn.style.cssText='display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;border:0.5px dashed rgba(167,139,250,.4);color:rgba(167,139,250,.6);font-size:14px;cursor:pointer;transition:all .15s;flex-shrink:0;line-height:1';
+    addBtn.textContent='+';
+    addBtn.title='Add genre or tag';
+    addBtn.addEventListener('mouseenter',function(){this.style.background='rgba(167,139,250,.1)';this.style.color='#a78bfa';});
+    addBtn.addEventListener('mouseleave',function(){this.style.background='';this.style.color='rgba(167,139,250,.6)';});
+    addBtn.addEventListener('click',function(e){
+      e.stopPropagation();
+      genreSuggestionsOpen=!genreSuggestionsOpen;
+      var sug=document.getElementById('genre-suggestions');
+      if(sug)sug.style.display=genreSuggestionsOpen?'flex':'none';
+      addBtn.textContent=genreSuggestionsOpen?'×':'+';
+      if(genreSuggestionsOpen)buildSuggestions(u);
+    });
+    display.appendChild(addBtn);
+  }
+
+  // Genre suggestions panel
+  var sug=document.getElementById('genre-suggestions');
+  if(sug)sug.style.display=(isOwn&&editOpen)?'flex':'none';
+  if(isOwn&&editOpen)buildSuggestions(u);
+}
+
+function buildSuggestions(u){
+  var uGenres=u.genres||[u.genre];
+  var container=document.getElementById('genre-picker-all');
+  if(!container)return;
+  container.innerHTML='';
+  GENRE_LIST.forEach(function(g){
+    var col=GENRE_COLORS[g]||'#a78bfa';
+    var btn=document.createElement('div');
+    btn.className='gpick'+(uGenres.indexOf(g)>=0?' selected':'');
+    if(uGenres.indexOf(g)>=0){btn.style.cssText='border-color:'+col+'50;color:'+col+';background:'+col+'15';}
+    btn.textContent=GENRE_VIBES[g]||g;
+    btn.addEventListener('click',function(){
+      u.genres=[g];u.genre=g;
+      buildGenrePicker(u,true);renderPlanets();scheduleSave&&scheduleSave();
+    });
+    container.appendChild(btn);
+  });
+  // custom tags remove list
+  var clist=document.getElementById('custom-tags-list');
+  if(clist){clist.innerHTML='';(u.customTags||[]).forEach(function(t){
+    var chip=document.createElement('div');chip.className='ctag';
+    chip.innerHTML=t+' <span style="font-size:11px">×</span>';
+    chip.addEventListener('click',function(){var i=(u.customTags||[]).indexOf(t);if(i>=0)u.customTags.splice(i,1);buildGenrePicker(u,true);scheduleSave&&scheduleSave();});
+    clist.appendChild(chip);
+  });}
+}
+
+// Custom tag add button
+document.getElementById('custom-keyword-add').addEventListener('click',function(){
+  var input=document.getElementById('custom-keyword-input');
+  var val=input.value.trim().toLowerCase().slice(0,20);
+  if(!val)return;
+  var u=getUserById(openedUserId);if(!u)return;
+  u.customTags=u.customTags||[];
+  if(u.customTags.indexOf(val)<0)u.customTags.push(val);
+  input.value='';
+  buildGenrePicker(u,false);openPanel(u);scheduleSave&&scheduleSave();
+});
+document.getElementById('custom-keyword-input').addEventListener('keydown',function(e){
+  if(e.key==='Enter')document.getElementById('custom-keyword-add').click();
+});
+
+// Recenter button
+document.getElementById('recenter-btn').addEventListener('click',function(e){
+  e.stopPropagation();
+  var wp=getWorldPos(0);
+  panTo(W/2-wp.x, H/2-wp.y, null);
+});
 
 resize();window.addEventListener('resize',resize);loop();updateZoomUI();
