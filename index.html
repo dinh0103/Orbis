@@ -1607,15 +1607,22 @@ function drawBg(){
       if(!visibleIds.has(lu.id))continue;
       var lpos=getPos(lu.id);
       var lr=radius(lu.songs)*scale;
-      // Position label below the planet bottom edge
-      var labelY=lpos.y+lr+Math.round(lr*0.78)+14*scale;
-      var fontSize=Math.max(8,10*scale);
+      // hatExtra in the SVG is computed from the UNSCALED r, then rendered at scale
+      // makePlanetSVG uses r = radius(songs)*scale as its r argument,
+      // so hatExtra = round(lr * 0.78) in screen pixels.
+      // The SVG total height = (lr*2+20) + hatExtra
+      // .pw centered at lpos means:
+      //   planet circle screen center = lpos.y + hatExtra/2
+      // Label sits just below planet bottom:
+      var hatExtraScaled = Math.round(lr * 0.78);
+      var planetScreenCY = lpos.y + hatExtraScaled * 0.5;
+      var labelY = planetScreenCY + lr + 8;
+      var fontSize = Math.max(8, 10*scale);
       ctx.save();
-      ctx.font=(lu.me?'600 ':'')+(fontSize)+'px sans-serif';
+      ctx.font=(lu.me?'600 ':'')+fontSize+'px sans-serif';
       ctx.fillStyle=lu.me?getUserColors(lu)[0]+'cc':'rgba(255,255,255,.55)';
       ctx.textAlign='center';
       ctx.textBaseline='top';
-      ctx.letterSpacing='0.02em';
       ctx.fillText(lu.me?'you':lu.name, lpos.x, labelY);
       ctx.restore();
     }
