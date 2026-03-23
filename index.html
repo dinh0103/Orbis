@@ -1527,23 +1527,22 @@ document.getElementById('add-btn').addEventListener('click',function(){
   var spotifyId=extractSpotifyId(val);
 
   if(spotifyId){
-    btn.textContent='Loading…';btn.style.opacity='.6';
-    // Use oEmbed to get playlist title (no auth needed, CORS-friendly via proxy)
+    // Spawn planet immediately with ID as name — don't wait for fetch
+    var slug=spotifyId.slice(0,14);
+    var planet=spawnPlanet(slug, Math.floor(Math.random()*60)+20, spotifyId, '#1db954');
+    input.value='';
+    // Then try to fetch the real name and update it
+    btn.textContent='Fetching…';btn.style.opacity='.6';
     var oEmbedUrl='https://open.spotify.com/oembed?url=https://open.spotify.com/playlist/'+spotifyId;
     fetch('https://corsproxy.io/?'+encodeURIComponent(oEmbedUrl))
       .then(function(r){return r.json();})
       .then(function(data){
-        var name=(data.title||'My Playlist').slice(0,22);
-        // Extract a rough color from thumbnail if available (just use a Spotify-y green)
-        var planet=spawnPlanet(name, Math.floor(Math.random()*60)+20, spotifyId, '#1db954');
-        input.value='';
+        var name=(data.title||slug).slice(0,22).toLowerCase();
+        planet.name=name;
+        planet.initials=name.slice(0,2).toUpperCase();
+        renderPlanets();
       })
-      .catch(function(){
-        // oEmbed failed — still spawn with the URL slug as name
-        var slug=val.replace(/.*playlist[/:]([A-Za-z0-9]+).*/,'$1').slice(0,16);
-        spawnPlanet(slug, Math.floor(Math.random()*40)+15, spotifyId, '#1db954');
-        input.value='';
-      })
+      .catch(function(){/* keep slug name */})
       .finally(function(){
         btn.textContent='+ Add planet';btn.style.opacity='1';
       });
