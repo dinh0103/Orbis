@@ -6,7 +6,7 @@
 <title>Orbis</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#04040f;overflow:hidden}
+html,body{background:#04040f;overflow:hidden;max-width:100vw}
 #root{width:100vw;height:100vh;position:relative;overflow:hidden;background:#04040f;font-family:sans-serif;cursor:default}
 canvas#bg{position:absolute;inset:0;width:100%;height:100%}
 #planets-layer{position:absolute;inset:0;pointer-events:none}
@@ -414,6 +414,11 @@ canvas#bg{position:absolute;inset:0;width:100%;height:100%}
     <div class="sp-row">
       <div><div class="sp-label">Planet labels</div></div>
       <div class="toggle on" id="tog-labels"><div class="toggle-knob"></div></div>
+    </div>
+    <div class="sp-row" style="margin-top:8px">
+      <span class="sp-slider-label">Text size</span>
+      <input type="range" id="text-size-slider" min="70" max="140" value="100" step="5" style="flex:1;accent-color:#a78bfa;cursor:pointer"/>
+      <span class="sp-slider-val" id="text-size-val">100%</span>
     </div>
   </div>
   <div class="sp-divider"></div>
@@ -1683,6 +1688,38 @@ slider.addEventListener('input',function(){
   PLANET_LIMIT=parseInt(this.value);
   sliderVal.textContent=PLANET_LIMIT>=20?'All':this.value;
   renderPlanets();
+});
+
+// Text size slider — use CSS custom property on root, then all text elements read it
+var textSlider=document.getElementById('text-size-slider');
+var textSizeVal=document.getElementById('text-size-val');
+var BASE_FONT_SIZES=[
+  ['.plabel',10],['.me-label',10],['.sp-label',11],['.sp-sub',9],
+  ['.disc-name',11],['.disc-reason',9],['.disc-genre',8],
+  ['.af-text',10],['.af-time',9],['.stat-num',18],['.stat-label',8],
+  ['.genre-bar-label',9],['.genre-bar-pct',9],['.st',11],['.sa',9],['.sd',9],
+  ['#pname',13],['#pmeta',10],['#pgenre',9],['#connect-btn',11],['#like-btn',11],
+  ['#compare-btn',11],['.compare-col-title',9],['.shared-tag',9],
+  ['.snum',9],['.cchip',10],['.fchip',10],['.stag',9],
+  ['#sb-title',9],['#sb-refresh-label',9],['.sp-section-title',9],
+  ['#badge-name',10],['.auth-tab',10],['.auth-input',11],
+  ['#auth-submit',12],['#auth-switch',10],['#auth-logo',15],
+  ['#activity-title',9],['.activity-btn',10],['.onboard-text',11],
+];
+// Inject a <style> block for text scaling
+var textStyleEl=document.createElement('style');textStyleEl.id='text-scale-style';
+document.head.appendChild(textStyleEl);
+function applyTextSize(pct){
+  var scale=pct/100;
+  var rules=BASE_FONT_SIZES.map(function(pair){
+    return pair[0]+'{font-size:'+(pair[1]*scale).toFixed(1)+'px!important}';
+  });
+  textStyleEl.textContent=rules.join('\n');
+}
+textSlider.addEventListener('input',function(){
+  var pct=parseInt(this.value);
+  textSizeVal.textContent=pct+'%';
+  applyTextSize(pct);
 });
 
 // Settings button toggle
