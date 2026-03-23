@@ -1488,9 +1488,7 @@ function buildDiscovery(){
     card.addEventListener('click',function(){
       // Pan camera to this planet
       var wp=getWorldPos(u.id);
-      offsetX=W/2-wp.x;offsetY=H/2-wp.y;
-      renderPlanets();
-      setTimeout(function(){openPanel(u);},80);
+      panTo(W/2-wp.x, H/2-wp.y, function(){openPanel(u);});
     });
     cards.appendChild(card);
   });
@@ -1577,9 +1575,7 @@ function spawnPlanet(name, songs, spotifyId, coverColor){
   // Pan camera to the new planet so it's always visible
   setTimeout(function(){
     var wp=getWorldPos(newUser.id);
-    offsetX=W/2-wp.x;offsetY=H/2-wp.y;
-    renderPlanets();
-    openPanel(newUser);
+    panTo(W/2-wp.x, H/2-wp.y, function(){openPanel(newUser);});
   },120);
   return newUser;
 }
@@ -1752,6 +1748,27 @@ function drawBg(){
   ctx.save();ctx.strokeStyle=wg;ctx.lineWidth=.7;ctx.setLineDash([2,7]);
   ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();ctx.setLineDash([]);ctx.restore();
 }}}
+}
+
+// Smooth animated camera pan
+var panAnim=null;
+function panTo(targetX, targetY, onDone){
+  if(panAnim)clearInterval(panAnim);
+  var startX=offsetX, startY=offsetY;
+  var dx=targetX-startX, dy=targetY-startY;
+  var duration=600, start=null;
+  function ease(t){return t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;} // easeInOutQuad
+  function step(ts){
+    if(!start)start=ts;
+    var t=Math.min((ts-start)/duration,1);
+    var e=ease(t);
+    offsetX=startX+dx*e;
+    offsetY=startY+dy*e;
+    renderPlanets();
+    if(t<1){requestAnimationFrame(step);}
+    else{panAnim=null;if(onDone)onDone();}
+  }
+  requestAnimationFrame(step);
 }
 
 function updateDriftTransforms(){
