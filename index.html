@@ -1525,8 +1525,12 @@ root.addEventListener('dblclick',function(e){
   var wy=(sy-cy)/scale+cy-offsetY;
   var nx=wx/(root.offsetWidth*1.35-root.offsetWidth*0.18+root.offsetWidth*0.18);
   // Convert screen pos back to normalized pos
-  var normX=(sx/scale+(cx*(1-1/scale))+offsetX+root.offsetWidth*0.18)/(root.offsetWidth*1.35);
-  var normY=(sy/scale+(cy*(1-1/scale))+offsetY+root.offsetHeight*0.18)/(root.offsetHeight*1.35);
+  // Reverse worldToScreen: sx = cx + (wx - cx + offsetX)*scale  =>  wx = sx/scale - offsetX + cx*(1 - 1/scale)
+  var wx = sx/scale - offsetX + cx*(1 - 1/scale);
+  var wy = sy/scale - offsetY + cy*(1 - 1/scale);
+  // Reverse getWorldPos: wx = pos.x*W*1.35 - W*0.18  =>  pos.x = (wx + W*0.18)/(W*1.35)
+  var normX = (wx + root.offsetWidth*0.18) / (root.offsetWidth*1.35);
+  var normY = (wy + root.offsetHeight*0.18) / (root.offsetHeight*1.35);
   normX=Math.max(0.05,Math.min(0.95,normX));
   normY=Math.max(0.05,Math.min(0.93,normY));
   var pal=PALETTE[nextPaletteIdx%PALETTE.length];nextPaletteIdx++;
@@ -1570,7 +1574,13 @@ function spawnPlanet(name, songs, spotifyId, coverColor){
   newUser.userAdded=true;
   USERS.push(newUser);nextId++;
   separatePlanets();renderPlanets();
-  setTimeout(function(){openPanel(newUser);},120);
+  // Pan camera to the new planet so it's always visible
+  setTimeout(function(){
+    var wp=getWorldPos(newUser.id);
+    offsetX=W/2-wp.x;offsetY=H/2-wp.y;
+    renderPlanets();
+    openPanel(newUser);
+  },120);
   return newUser;
 }
 
