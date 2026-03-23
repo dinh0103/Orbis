@@ -1264,10 +1264,7 @@ function renderPlanets(){
     } else {
       (function(user,el){el.addEventListener('click',function(e){e.stopPropagation();openPanel(user);});})(u,svgEl);
     }
-    var label=document.createElement('div');label.className='plabel'+(u.me?' me-label':'');label.textContent=u.me?'you':u.name;label.style.display=OPT_LABELS?'':'none';
-    // Match label width to planet SVG so it's always centered under the planet
-    var svgW=(r*2+20);label.style.width=svgW+'px';
-    wrap.appendChild(svgWrap);wrap.appendChild(label);planetsLayer.appendChild(wrap);
+    wrap.appendChild(svgWrap);planetsLayer.appendChild(wrap);
   }
 }
 function renderAll(){renderPlanets();buildDiscovery();}
@@ -1603,6 +1600,27 @@ function drawBg(){
     var topY=sp.y-80*scale;for(var ui=0;ui<USERS.length;ui++){if(USERS[ui].genre===g){var pp=getPos(USERS[ui].id),rr=radius(USERS[ui].songs)*scale;if(pp.y-rr-24*scale<topY)topY=pp.y-rr-24*scale;}}
     ctx.save();ctx.font='italic '+(Math.max(9,11*scale))+'px sans-serif';ctx.fillStyle=(GENRE_COLORS[g]||'#fff')+'80';ctx.textAlign='center';ctx.fillText(GENRE_VIBES[g]||g,sp.x,topY);ctx.restore();
   }}
+  // Planet name labels drawn on canvas — always perfectly centered
+  if(OPT_LABELS){
+    for(var li=0;li<USERS.length;li++){
+      var lu=USERS[li];
+      if(!visibleIds.has(lu.id))continue;
+      var lpos=getPos(lu.id);
+      var lr=radius(lu.songs)*scale;
+      // Position label below the planet bottom edge
+      var labelY=lpos.y+lr+Math.round(lr*0.78)+14*scale;
+      var fontSize=Math.max(8,10*scale);
+      ctx.save();
+      ctx.font=(lu.me?'600 ':'')+(fontSize)+'px sans-serif';
+      ctx.fillStyle=lu.me?getUserColors(lu)[0]+'cc':'rgba(255,255,255,.55)';
+      ctx.textAlign='center';
+      ctx.textBaseline='top';
+      ctx.letterSpacing='0.02em';
+      ctx.fillText(lu.me?'you':lu.name, lpos.x, labelY);
+      ctx.restore();
+    }
+  }
+
   var drawn={};
   if(OPT_LINES)for(var u=0;u<USERS.length;u++){var user=USERS[u];for(var c=0;c<user.connections.length;c++){var cid=user.connections[c],key=Math.min(user.id,cid)+'-'+Math.max(user.id,cid);if(drawn[key])continue;drawn[key]=true;var cu=getUserById(cid);if(!cu)continue;var isMe=user.me||cu.me,p1=getPos(user.id),p2=getPos(cid);if(isMe){
   var segs=6,pts=[];
@@ -1691,7 +1709,7 @@ slider.addEventListener('input',function(){
 var textSlider=document.getElementById('text-size-slider');
 var textSizeVal=document.getElementById('text-size-val');
 var BASE_FONT_SIZES=[
-  ['.plabel',10],['.me-label',10],['.sp-label',11],['.sp-sub',9],
+  // planet labels now on canvas['.sp-label',11],['.sp-sub',9],
   ['.disc-name',11],['.disc-reason',9],['.disc-genre',8],
   ['.af-text',10],['.af-time',9],['.stat-num',18],['.stat-label',8],
   ['.genre-bar-label',9],['.genre-bar-pct',9],['.st',11],['.sa',9],['.sd',9],
