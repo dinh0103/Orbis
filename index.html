@@ -58,7 +58,7 @@ canvas#bg{position:absolute;inset:0;width:100%;height:100%}
 #add-btn:hover{background:rgba(167,139,250,.24)}
 
 /* Side panel */
-#panel{position:absolute;right:0;top:0;bottom:0;width:300px;background:rgba(4,4,20,.97);border-left:0.5px solid rgba(255,255,255,.07);padding:16px 14px 16px;display:none;flex-direction:column;gap:11px;overflow-y:auto;z-index:30}
+#panel{position:absolute;right:0;top:0;bottom:0;width:300px;background:rgba(4,4,20,.97);border-left:0.5px solid rgba(255,255,255,.07);padding:16px 14px 16px;display:none;flex-direction:column;gap:11px;overflow-y:auto;overflow-x:hidden;z-index:30}
 #panel.open{display:flex}
 #pcls{position:absolute;top:10px;right:12px;background:none;border:none;color:rgba(255,255,255,.35);font-size:20px;cursor:pointer;line-height:1}
 #pav{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
@@ -437,46 +437,54 @@ canvas#bg{position:absolute;inset:0;width:100%;height:100%}
     <div id="like-btn">♡ Like</div>
     <div id="connect-btn">⟶ Connect</div>
   </div>
-  <!-- Color customizer shown only for "me" planet -->
+  <!-- Color customizer shown only for "me" planet — collapsible -->
   <div id="color-section">
-    <div id="color-section-title">Planet color</div>
-    <!-- Color wheel picker -->
-    <div style="display:flex;gap:10px;align-items:flex-start;margin-top:6px">
-      <div style="display:flex;flex-direction:column;gap:5px;flex:1">
-        <div style="font-size:9px;color:rgba(255,255,255,.3);margin-bottom:2px">Primary</div>
-        <canvas id="color-wheel" width="120" height="120" style="width:100px;height:100px;border-radius:50%;cursor:crosshair;display:block;background:#1a0a2a"></canvas>
-        <div style="display:flex;align-items:center;gap:5px;margin-top:2px">
-          <div id="color-preview" style="width:18px;height:18px;border-radius:4px;border:1px solid rgba(255,255,255,.2);flex-shrink:0"></div>
-          <input id="color-hex" maxlength="7" style="flex:1;background:rgba(255,255,255,.06);border:0.5px solid rgba(255,255,255,.12);border-radius:6px;padding:3px 6px;color:#fff;font-size:10px;font-family:monospace;outline:none" placeholder="#a78bfa"/>
-        </div>
+    <!-- Dropdown toggle header -->
+    <div id="color-section-header" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,.04);border:0.5px solid rgba(255,255,255,.07);user-select:none">
+      <div style="display:flex;align-items:center;gap:7px">
+        <div id="color-preview-mini" style="width:12px;height:12px;border-radius:50%;flex-shrink:0;background:#a78bfa"></div>
+        <span style="font-size:10px;color:rgba(255,255,255,.6)">Customize planet</span>
       </div>
-      <div style="display:flex;flex-direction:column;gap:5px;flex:1">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
-          <span style="font-size:9px;color:rgba(255,255,255,.3)">Secondary</span>
-          <div id="gradient-toggle" style="display:flex;align-items:center;gap:4px;cursor:pointer">
-            <div id="gradient-check"></div>
-            <span style="font-size:9px;color:rgba(255,255,255,.3)">on</span>
+      <span id="color-section-chevron" style="font-size:11px;color:rgba(255,255,255,.3);transition:transform .2s">▾</span>
+    </div>
+    <!-- Collapsible body -->
+    <div id="color-section-body" style="display:none;flex-direction:column;gap:8px;margin-top:6px;overflow:hidden">
+      <!-- Color wheels side by side, constrained width -->
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <div style="display:flex;flex-direction:column;gap:4px;width:calc(50% - 4px)">
+          <div style="font-size:9px;color:rgba(255,255,255,.3)">Primary</div>
+          <canvas id="color-wheel" width="120" height="120" style="width:100%;aspect-ratio:1;border-radius:50%;cursor:crosshair;display:block;background:#1a0a2a;max-width:110px"></canvas>
+          <div style="display:flex;align-items:center;gap:4px">
+            <div id="color-preview" style="width:14px;height:14px;border-radius:3px;border:1px solid rgba(255,255,255,.2);flex-shrink:0"></div>
+            <input id="color-hex" maxlength="7" style="flex:1;min-width:0;background:rgba(255,255,255,.06);border:0.5px solid rgba(255,255,255,.12);border-radius:5px;padding:3px 5px;color:#fff;font-size:9px;font-family:monospace;outline:none" placeholder="#a78bfa"/>
           </div>
         </div>
-        <canvas id="color-wheel2" width="120" height="120" style="width:100px;height:100px;border-radius:50%;cursor:crosshair;display:block;opacity:.4;background:#1a0a2a"></canvas>
-        <div style="display:flex;align-items:center;gap:5px;margin-top:2px">
-          <div id="color-preview2" style="width:18px;height:18px;border-radius:4px;border:1px solid rgba(255,255,255,.2);flex-shrink:0"></div>
-          <input id="color-hex2" maxlength="7" style="flex:1;background:rgba(255,255,255,.06);border:0.5px solid rgba(255,255,255,.12);border-radius:6px;padding:3px 6px;color:#fff;font-size:10px;font-family:monospace;outline:none" placeholder="#60a5fa"/>
+        <div style="display:flex;flex-direction:column;gap:4px;width:calc(50% - 4px)">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:9px;color:rgba(255,255,255,.3)">Secondary</span>
+            <div id="gradient-toggle" style="display:flex;align-items:center;gap:3px;cursor:pointer">
+              <div id="gradient-check"></div>
+              <span style="font-size:9px;color:rgba(255,255,255,.25)">on</span>
+            </div>
+          </div>
+          <canvas id="color-wheel2" width="120" height="120" style="width:100%;aspect-ratio:1;border-radius:50%;cursor:crosshair;display:block;opacity:.4;background:#1a0a2a;max-width:110px"></canvas>
+          <div style="display:flex;align-items:center;gap:4px">
+            <div id="color-preview2" style="width:14px;height:14px;border-radius:3px;border:1px solid rgba(255,255,255,.2);flex-shrink:0"></div>
+            <input id="color-hex2" maxlength="7" style="flex:1;min-width:0;background:rgba(255,255,255,.06);border:0.5px solid rgba(255,255,255,.12);border-radius:5px;padding:3px 5px;color:#fff;font-size:9px;font-family:monospace;outline:none" placeholder="#60a5fa"/>
+          </div>
+        </div>
+      </div>
+      <!-- Gradient blend row -->
+      <div id="gradient-blend-row" style="display:none">
+        <div id="grad-preview" style="height:10px;border-radius:5px;margin-bottom:7px"></div>
+        <div style="display:flex;align-items:center;gap:7px">
+          <span style="font-size:9px;color:rgba(255,255,255,.3);width:32px;flex-shrink:0">Angle</span>
+          <input type="range" id="grad-angle" min="0" max="360" value="135" step="1" style="flex:1;accent-color:#a78bfa;cursor:pointer"/>
+          <span style="font-size:9px;color:rgba(255,255,255,.35);width:26px;text-align:right;flex-shrink:0" id="grad-angle-val">135°</span>
         </div>
       </div>
     </div>
-    <!-- Gradient controls -->
-    <div id="gradient-blend-row" style="display:none;margin-top:10px">
-      <div id="grad-preview" style="height:12px;border-radius:6px;margin-bottom:8px"></div>
-      <div style="display:flex;align-items:center;gap:7px">
-        <span style="font-size:9px;color:rgba(255,255,255,.3);width:36px;flex-shrink:0">Angle</span>
-        <div style="flex:1;position:relative;height:20px">
-          <input type="range" id="grad-angle" min="0" max="360" value="135" step="1" style="width:100%;accent-color:#a78bfa;cursor:pointer;position:absolute;top:0"/>
-        </div>
-        <span style="font-size:9px;color:rgba(255,255,255,.35);width:28px;text-align:right;flex-shrink:0" id="grad-angle-val">135°</span>
-      </div>
-    </div>
-    <!-- Hidden swatches for compatibility -->
+    <!-- Hidden for compatibility -->
     <div id="color-swatches" style="display:none"></div>
     <div id="color-swatches2" style="display:none"></div>
     <div id="gradient-style-row" style="display:none"></div>
@@ -1127,6 +1135,23 @@ function ensureWheels(){
   initColorWheel('color-wheel2','color-preview2','color-hex2',function(){return myColor2;},function(v){if(myGradient)myColor2=v;});
 }
 
+// Update mini color preview in dropdown header
+function updateColorMiniPreview(){
+  var mini=document.getElementById('color-preview-mini');
+  if(mini)mini.style.background=myGradient?'linear-gradient(135deg,'+myColor+','+myColor2+')':myColor;
+}
+
+// Dropdown toggle for color section
+var colorSectionOpen=false;
+document.getElementById('color-section-header').addEventListener('click',function(){
+  colorSectionOpen=!colorSectionOpen;
+  var body=document.getElementById('color-section-body');
+  var chevron=document.getElementById('color-section-chevron');
+  body.style.display=colorSectionOpen?'flex':'none';
+  chevron.style.transform=colorSectionOpen?'rotate(180deg)':'';
+  if(colorSectionOpen){setTimeout(ensureWheels,0);buildColorSection();}
+});
+
 buildColorSection();
 document.getElementById('gradient-toggle').addEventListener('click',function(){
   myGradient=!myGradient;buildColorSection();renderPlanets();
@@ -1267,7 +1292,7 @@ function renderPlanets(){
     wrap.appendChild(svgWrap);planetsLayer.appendChild(wrap);
   }
 }
-function renderAll(){renderPlanets();buildDiscovery();}
+function renderAll(){renderPlanets();buildDiscovery();updateColorMiniPreview&&updateColorMiniPreview();}
 
 function openHatPicker(e){
   var picker=document.getElementById('hat-picker');
@@ -1294,7 +1319,7 @@ function openPanel(u){
     ar.style.display='none';
     cs.className='visible';
     buildColorSection();
-    setTimeout(ensureWheels,0);
+    updateColorMiniPreview();
   } else {
     ar.style.display='flex';cs.className='';
     var me=USERS[0],isLiked=me.likes.indexOf(u.id)>=0,isConn=me.connections.indexOf(u.id)>=0;
