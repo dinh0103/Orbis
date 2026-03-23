@@ -1334,7 +1334,8 @@ function openPanel(u){
     pnameEl.contentEditable='false';pnameEl.style.borderBottom='none';pnameEl.style.cursor='';pnameEl.oninput=null;
     pnameEl.textContent=u.me?'you (your planet)':u.name;
   }
-  document.getElementById('pmeta').textContent=u.songs+' songs · '+u.genre+(u.userAdded&&u.owner?' · added by '+u.owner:'');
+  var playlistLabel=u.playlistTitle?' · "'+u.playlistTitle+'"':'';
+  document.getElementById('pmeta').textContent=u.songs+' songs · '+u.genre+playlistLabel;
   var pg=document.getElementById('pgenre');pg.textContent=u.genre;pg.style.background=cols[0]+'20';pg.style.color=cols[0];
   var ar=document.getElementById('action-row'),lb=document.getElementById('like-btn'),cb=document.getElementById('connect-btn');
   var cs=document.getElementById('color-section');
@@ -1562,12 +1563,12 @@ function spawnPlanet(name, songs, spotifyId, coverColor){
   var bp={x:Math.max(.05,Math.min(.95,cc.x+Math.cos(angle)*spread)),y:Math.max(.05,Math.min(.92,cc.y+Math.sin(angle)*spread))};
   var gradStyles=["nebula","aurora","lava","ice","void",null,null];
   var rndGrad=gradStyles[Math.floor(Math.random()*gradStyles.length)];
-  // Use logged-in username or "you" as the planet owner/name
+  // Planet name is always the owner (you/username). Playlist title stored separately.
   var ownerName=currentUser?currentUser.username:'you';
-  var displayName=(name&&name!==ownerName)?name.toLowerCase().slice(0,20):ownerName;
-  var newUser={id:nextId,name:displayName,songs:songs||30,genre:genre,connections:[],likes:[],
-    initials:displayName.slice(0,2).toUpperCase(),baseColor:baseColor,gradient:rndGrad,pos:bp,
-    spotifyId:spotifyId||null,owner:ownerName,
+  var playlistTitle=name&&name!==ownerName?name:null;
+  var newUser={id:nextId,name:ownerName,songs:songs||30,genre:genre,connections:[],likes:[],
+    initials:ownerName.slice(0,2).toUpperCase(),baseColor:baseColor,gradient:rndGrad,pos:bp,
+    spotifyId:spotifyId||null,owner:ownerName,playlistTitle:playlistTitle,
     playlist:[{t:"Open Spotify to play",a:"Embedded player below",d:""}]};
   newUser.userAdded=true;
   USERS.push(newUser);nextId++;
@@ -1598,8 +1599,7 @@ document.getElementById('add-btn').addEventListener('click',function(){
       .then(function(r){return r.json();})
       .then(function(data){
         var name=(data.title||slug).slice(0,22).toLowerCase();
-        planet.name=name;
-        planet.initials=name.slice(0,2).toUpperCase();
+        planet.playlistTitle=name; // store playlist title, keep planet name as owner
         renderPlanets();
       })
       .catch(function(){/* keep slug name */})
@@ -1709,7 +1709,8 @@ function drawBg(){
       ctx.fillStyle=lu.me?getUserColors(lu)[0]+'cc':'rgba(255,255,255,.55)';
       ctx.textAlign='center';
       ctx.textBaseline='top';
-      ctx.fillText(lu.me?'you':lu.name, lpos.x, labelY);
+      var labelText=lu.me?'you':(lu.userAdded&&lu.owner?lu.owner:lu.name);
+      ctx.fillText(labelText, lpos.x, labelY);
       ctx.restore();
     }
   }
@@ -1753,20 +1754,22 @@ function drawBg(){
 // Smooth animated camera pan
 var panAnim=null;
 function panTo(targetX, targetY, onDone){
-  if(panAnim)clearInterval(panAnim);
+  if(panAnim){cancelAnimationFrame(panAnim);panAnim=null;}
   var startX=offsetX, startY=offsetY;
   var dx=targetX-startX, dy=targetY-startY;
   var duration=600, start=null;
   function ease(t){return t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;} // easeInOutQuad
+  var lastRender=-1;
   function step(ts){
     if(!start)start=ts;
     var t=Math.min((ts-start)/duration,1);
     var e=ease(t);
     offsetX=startX+dx*e;
     offsetY=startY+dy*e;
-    renderPlanets();
-    if(t<1){requestAnimationFrame(step);}
-    else{panAnim=null;if(onDone)onDone();}
+    // Only rebuild DOM planets every ~4 frames to keep it smooth
+    if(ts-lastRender>64){renderPlanets();lastRender=ts;}
+    if(t<1){panAnim=requestAnimationFrame(step);}
+    else{renderPlanets();panAnim=null;if(onDone)onDone();}
   }
   requestAnimationFrame(step);
 }
