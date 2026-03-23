@@ -1310,8 +1310,31 @@ function openPanel(u){
   openedUserId=u.id;
   var cols=getUserColors(u);
   document.getElementById('pav').style.background=cols[1]+'40';document.getElementById('pav').style.color=cols[0];document.getElementById('pav').textContent=u.initials;
-  document.getElementById('pname').textContent=u.me?'you (your planet)':u.name;
-  document.getElementById('pmeta').textContent=u.songs+' songs · '+u.genre;
+  if(u.userAdded){
+    // Show editable name for user-added planets
+    var pnameEl=document.getElementById('pname');
+    pnameEl.contentEditable='true';
+    pnameEl.style.outline='none';
+    pnameEl.style.borderBottom='0.5px dashed rgba(255,255,255,.2)';
+    pnameEl.style.cursor='text';
+    pnameEl.title='Click to rename';
+    pnameEl.textContent=u.name;
+    pnameEl.oninput=function(){
+      u.name=pnameEl.textContent.trim().toLowerCase().slice(0,20)||'you';
+      u.initials=u.name.slice(0,2).toUpperCase();
+      renderPlanets();scheduleSave&&scheduleSave();
+    };
+    pnameEl.onblur=function(){
+      pnameEl.contentEditable='false';
+      pnameEl.style.borderBottom='none';pnameEl.style.cursor='';
+    };
+    pnameEl.onfocus=function(){pnameEl.style.borderBottom='0.5px dashed rgba(167,139,250,.5)';};
+  } else {
+    var pnameEl=document.getElementById('pname');
+    pnameEl.contentEditable='false';pnameEl.style.borderBottom='none';pnameEl.style.cursor='';pnameEl.oninput=null;
+    pnameEl.textContent=u.me?'you (your planet)':u.name;
+  }
+  document.getElementById('pmeta').textContent=u.songs+' songs · '+u.genre+(u.userAdded&&u.owner?' · added by '+u.owner:'');
   var pg=document.getElementById('pgenre');pg.textContent=u.genre;pg.style.background=cols[0]+'20';pg.style.color=cols[0];
   var ar=document.getElementById('action-row'),lb=document.getElementById('like-btn'),cb=document.getElementById('connect-btn');
   var cs=document.getElementById('color-section');
@@ -1509,7 +1532,7 @@ root.addEventListener('dblclick',function(e){
   var pal=PALETTE[nextPaletteIdx%PALETTE.length];nextPaletteIdx++;
   var genre=GENRE_LIST[Math.floor(Math.random()*GENRE_LIST.length)];
   var gradStyles=["nebula","aurora","lava","ice","void",null,null];
-  var newU={id:nextId,name:'planet'+nextId,songs:Math.floor(Math.random()*40)+10,genre:genre,
+  var newU={id:nextId,name:currentUser?currentUser.username:'you',songs:Math.floor(Math.random()*40)+10,genre:genre,
     connections:[],likes:[],initials:'P'+nextId,baseColor:pal[0],
     gradient:gradStyles[Math.floor(Math.random()*gradStyles.length)],
     pos:{x:normX,y:normY},spotifyId:null,userAdded:true,
@@ -1537,10 +1560,12 @@ function spawnPlanet(name, songs, spotifyId, coverColor){
   var bp={x:Math.max(.05,Math.min(.95,cc.x+Math.cos(angle)*spread)),y:Math.max(.05,Math.min(.92,cc.y+Math.sin(angle)*spread))};
   var gradStyles=["nebula","aurora","lava","ice","void",null,null];
   var rndGrad=gradStyles[Math.floor(Math.random()*gradStyles.length)];
-  var displayName=(name||('planet'+nextId)).toLowerCase().slice(0,20);
+  // Use logged-in username or "you" as the planet owner/name
+  var ownerName=currentUser?currentUser.username:'you';
+  var displayName=(name&&name!==ownerName)?name.toLowerCase().slice(0,20):ownerName;
   var newUser={id:nextId,name:displayName,songs:songs||30,genre:genre,connections:[],likes:[],
     initials:displayName.slice(0,2).toUpperCase(),baseColor:baseColor,gradient:rndGrad,pos:bp,
-    spotifyId:spotifyId||null,
+    spotifyId:spotifyId||null,owner:ownerName,
     playlist:[{t:"Open Spotify to play",a:"Embedded player below",d:""}]};
   newUser.userAdded=true;
   USERS.push(newUser);nextId++;
