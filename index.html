@@ -10,8 +10,8 @@ html,body{background:#04040f;overflow:hidden;max-width:100vw}
 #root{width:100vw;height:100vh;position:relative;overflow:hidden;background:#04040f;font-family:sans-serif;cursor:default}
 canvas#bg{position:absolute;inset:0;width:100%;height:100%}
 #planets-layer{position:absolute;inset:0;pointer-events:none}
-.pw{position:absolute;transform:translate(-50%,-50%);pointer-events:all}
-.plabel{text-align:center;font-size:10px;color:rgba(255,255,255,.55);margin-top:3px;white-space:nowrap;pointer-events:none;letter-spacing:.02em}
+.pw{position:absolute;transform:translate(-50%,-50%);pointer-events:all;display:flex;flex-direction:column;align-items:center}
+.plabel{text-align:center;font-size:10px;color:rgba(255,255,255,.55);margin-top:3px;white-space:nowrap;pointer-events:none;letter-spacing:.02em;width:100%;max-width:120px}
 .me-label{color:var(--me-color,#a78bfa);font-weight:600}
 
 #topbar{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:20;width:min(300px,78%)}
