@@ -11,7 +11,7 @@ html,body{background:#04040f;overflow:hidden;max-width:100vw}
 canvas#bg{position:absolute;inset:0;width:100%;height:100%}
 #planets-layer{position:absolute;inset:0;pointer-events:none}
 .pw{position:absolute;transform:translate(-50%,-50%);pointer-events:all;display:flex;flex-direction:column;align-items:center}
-.plabel{text-align:center;font-size:10px;color:rgba(255,255,255,.55);margin-top:3px;white-space:nowrap;pointer-events:none;letter-spacing:.02em;width:100%;max-width:120px}
+.plabel{text-align:center;font-size:10px;color:rgba(255,255,255,.55);margin-top:3px;white-space:nowrap;pointer-events:none;letter-spacing:.02em}
 .me-label{color:var(--me-color,#a78bfa);font-weight:600}
 
 #topbar{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:20;width:min(300px,78%)}
@@ -1265,6 +1265,8 @@ function renderPlanets(){
       (function(user,el){el.addEventListener('click',function(e){e.stopPropagation();openPanel(user);});})(u,svgEl);
     }
     var label=document.createElement('div');label.className='plabel'+(u.me?' me-label':'');label.textContent=u.me?'you':u.name;label.style.display=OPT_LABELS?'':'none';
+    // Match label width to planet SVG so it's always centered under the planet
+    var svgW=(r*2+20);label.style.width=svgW+'px';
     wrap.appendChild(svgWrap);wrap.appendChild(label);planetsLayer.appendChild(wrap);
   }
 }
