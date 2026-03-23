@@ -1490,6 +1490,34 @@ document.getElementById('search-input').addEventListener('input',function(e){sea
 
 root.addEventListener('mousedown',function(e){if(zoomDragging)return;if(e.target.closest('svg')||e.target.closest('#panel')||e.target.closest('#topbar')||e.target.closest('#sidebar')||e.target.closest('#add-panel')||e.target.closest('#zoom-bar')||e.target.closest('#hat-picker')||e.target.closest('#settings-panel')||e.target.closest('#settings-btn')||e.target.closest('#auth-popup')||e.target.closest('#auth-btn')||e.target.closest('#activity-panel')||e.target.closest('#activity-btn')||e.target.closest('#compare-modal')||e.target.closest('#onboard-overlay')||e.target.closest('#help-btn'))return;panDragging=true;panSX=e.clientX;panSY=e.clientY;panOX=offsetX;panOY=offsetY;root.style.cursor='grabbing';});
 root.addEventListener('touchstart',function(e){var t=e.touches[0];panDragging=true;panSX=t.clientX;panSY=t.clientY;panOX=offsetX;panOY=offsetY;},{passive:true});
+
+// Double-click blank space to create a new planet there
+root.addEventListener('dblclick',function(e){
+  if(e.target.closest('svg')||e.target.closest('#panel')||e.target.closest('#topbar')||e.target.closest('#sidebar')||e.target.closest('#add-panel')||e.target.closest('#zoom-bar')||e.target.closest('#hat-picker')||e.target.closest('#settings-panel')||e.target.closest('#settings-btn')||e.target.closest('#auth-popup')||e.target.closest('#auth-btn')||e.target.closest('#activity-panel')||e.target.closest('#activity-btn'))return;
+  // Convert click position to world coords and spawn planet there
+  var rect=root.getBoundingClientRect();
+  var sx=e.clientX-rect.left, sy=e.clientY-rect.top;
+  var cx=root.offsetWidth/2, cy=root.offsetHeight/2;
+  var wx=(sx-cx)/scale+cx-offsetX;
+  var wy=(sy-cy)/scale+cy-offsetY;
+  var nx=wx/(root.offsetWidth*1.35-root.offsetWidth*0.18+root.offsetWidth*0.18);
+  // Convert screen pos back to normalized pos
+  var normX=(sx/scale+(cx*(1-1/scale))+offsetX+root.offsetWidth*0.18)/(root.offsetWidth*1.35);
+  var normY=(sy/scale+(cy*(1-1/scale))+offsetY+root.offsetHeight*0.18)/(root.offsetHeight*1.35);
+  normX=Math.max(0.05,Math.min(0.95,normX));
+  normY=Math.max(0.05,Math.min(0.93,normY));
+  var pal=PALETTE[nextPaletteIdx%PALETTE.length];nextPaletteIdx++;
+  var genre=GENRE_LIST[Math.floor(Math.random()*GENRE_LIST.length)];
+  var gradStyles=["nebula","aurora","lava","ice","void",null,null];
+  var newU={id:nextId,name:'planet'+nextId,songs:Math.floor(Math.random()*40)+10,genre:genre,
+    connections:[],likes:[],initials:'P'+nextId,baseColor:pal[0],
+    gradient:gradStyles[Math.floor(Math.random()*gradStyles.length)],
+    pos:{x:normX,y:normY},spotifyId:null,userAdded:true,
+    playlist:[{t:'Track 1',a:'Artist A',d:'3:12'},{t:'Track 2',a:'Artist B',d:'4:05'}]};
+  USERS.push(newU);nextId++;
+  separatePlanets();renderPlanets();
+  setTimeout(function(){openPanel(newU);},100);
+});
 document.addEventListener('touchmove',function(e){if(!panDragging)return;var t=e.touches[0];offsetX=panOX+(t.clientX-panSX)/scale;offsetY=panOY+(t.clientY-panSY)/scale;renderPlanets();},{passive:true});
 document.addEventListener('touchend',function(){panDragging=false;});
 
@@ -1514,6 +1542,7 @@ function spawnPlanet(name, songs, spotifyId, coverColor){
     initials:displayName.slice(0,2).toUpperCase(),baseColor:baseColor,gradient:rndGrad,pos:bp,
     spotifyId:spotifyId||null,
     playlist:[{t:"Open Spotify to play",a:"Embedded player below",d:""}]};
+  newUser.userAdded=true;
   USERS.push(newUser);nextId++;
   separatePlanets();renderPlanets();
   setTimeout(function(){openPanel(newUser);},120);
@@ -1933,7 +1962,17 @@ function saveUserState(){
   currentUser.connections=me.connections.slice();
   currentUser.likes=me.likes.slice();
   // Save added planets (non-original, non-me)
-  currentUser.addedPlanets=USERS.filter(function(u){return u.id>=9&&!u.me;});
+  // Save all non-me non-demo planets the user added
+  currentUser.addedPlanets=USERS.filter(function(u){return u.userAdded;}).map(function(u){return{id:u.id,name:u.name,songs:u.songs,genre:u.genre,connections:u.connections.slice(),likes:u.likes.slice(),initials:u.initials,baseColor:u.baseColor,baseColor2:u.baseColor2||null,gradAngle:u.gradAngle||135,gradient:u.gradient||null,pos:u.pos,spotifyId:u.spotifyId||null,userAdded:true,playlist:u.playlist.slice()};});
+var _unused=USERS.filter(function(u){
+    return !u.me && u.id>=nextId-USERS.filter(function(x){return !x.me&&x.id<9;}).length-8;
+  }).map(function(u){
+    return {id:u.id,name:u.name,songs:u.songs,genre:u.genre,connections:u.connections.slice(),
+      likes:u.likes.slice(),initials:u.initials,baseColor:u.baseColor,baseColor2:u.baseColor2||null,
+      gradAngle:u.gradAngle||135,gradient:u.gradient||null,pos:u.pos,
+      spotifyId:u.spotifyId||null,
+      playlist:u.playlist.slice()};
+  });
   var accounts=dbAccounts();
   accounts[currentUser.email]=currentUser;
   dbSaveAccounts(accounts);
